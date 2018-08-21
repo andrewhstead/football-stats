@@ -16,3 +16,42 @@ header {
 h1 {
 	margin: 0;
 }
+
+/* Styles for game results. */
+.result-list {
+	margin: 5px auto;
+	border-collapse: collapse;
+}
+
+.result-list tr:nth-of-type(odd) {
+    background: #ccddaa;
+}
+
+.result-list tr:nth-of-type(even) {
+    background: #eeffcc;
+}
+
+.result-list tr {
+	border-top: 1px solid #556633;
+	padding: 0 5px 2px 5px;
+}
+
+.result-list tr:last-of-type {
+	border-bottom: 1px solid #556633;
+}
+
+.result-list td {
+	margin: 0 2px;
+}
+
+.right-align {
+	text-align: right;
+}
+
+.center-align {
+	text-align: center;
+}
+
+.game-score {
+	min-width: 30px;
+}
