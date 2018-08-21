@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+	<h2>
+		League Tables
+	</h2>
+
+	{% for league in leagues %}
+		{{ league.name }}<br />
+
+		{% for competition in competitions %}
+
+			{% if competition.league == league %}
+				{{ competition.name }}
+			{% endif %}
+
+		{% endfor %}
+
+	{% endfor %}
+
+{% endblock %}

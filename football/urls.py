@@ -22,6 +22,7 @@ from home import views as home_views
 urlpatterns = [
     url(r'^$', home_views.home_page, name='home'),
     url(r'^admin/', admin.site.urls),
+    url(r'^tables/', game_views.league_tables, name='league_tables'),
     url(r'^results/$', game_views.latest_results, name='latest_results'),
 ]
 

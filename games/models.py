@@ -13,9 +13,9 @@ STATUS_OPTIONS = (
 
 # Create your models here.
 
-# Competition model to set up leagues.
-class Competition(models.Model):
-	country = models.ForeignKey(Country, related_name='competitions')
+# League model for overall competitions.
+class League(models.Model):
+	country = models.ForeignKey(Country, related_name='leagues')
 	name = models.CharField(max_length=25)
 	abbreviation = models.CharField(max_length=3)
 	tier = models.IntegerField()
@@ -31,10 +31,21 @@ class Season(models.Model):
 	def __unicode__(self):
 		return self.name
 
+# Competition model for individual league seasons.
+class Competition(models.Model):
+	country = models.ForeignKey(Country, related_name='competitions')
+	league = models.ForeignKey(League, related_name='competitions')
+	season = models.ForeignKey(Season, related_name='competitions')
+	name = models.CharField(max_length=25)
+	abbreviation = models.CharField(max_length=3)
+	teams = models.ManyToManyField(Team, related_name='teams', blank=True)
+
+	def __unicode__(self):
+		return self.name
+
 # Game model for individual matches.
 class Game(models.Model):
-	competition = models.ForeignKey(Competition, related_name='results')
-	season = models.ForeignKey(Season, related_name='games')
+	competition = models.ForeignKey(Competition, related_name='games')
 	game_status = models.CharField(max_length=10, choices=STATUS_OPTIONS, default="Scheduled")
 	game_date = models.DateField()
 	game_time = models.TimeField(blank=True, null=True)
