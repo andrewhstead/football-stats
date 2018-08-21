@@ -3,6 +3,12 @@
 
 {% block content %}
 
-	Moo
+	{% for game in games %}
+		{{ game.game_date|date:"d/m/y" }} 
+		{{ game.home_team.short_name }} 
+		{{ game.home_score }}-{{ game.away_score }} 
+		{{ game.away_team.short_name }}
+		<br />
+	{% endfor %}
 
 {% endblock %}

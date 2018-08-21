@@ -1,0 +1,18 @@
+/* General site layout styles */
+body {
+    margin: 0;
+    padding: 0;
+	font-family: "Oswald", sans-serif;
+}
+
+header {
+	background-color: #666666;
+	color: white;
+	text-align: center;
+	padding: 0 0 2px 0;
+	border-bottom: 2px black solid;
+}
+
+h1 {
+	margin: 0;
+}

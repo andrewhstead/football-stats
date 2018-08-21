@@ -33,11 +33,11 @@ class Season(models.Model):
 
 # Game model for individual matches.
 class Game(models.Model):
-	competition = models.ForeignKey(Country, related_name='results')
-	season = models.ForeignKey(Country, related_name='games')
+	competition = models.ForeignKey(Competition, related_name='results')
+	season = models.ForeignKey(Season, related_name='games')
 	game_status = models.CharField(max_length=10, choices=STATUS_OPTIONS, default="Scheduled")
 	game_date = models.DateField()
-	game_time = models.TimeField()
+	game_time = models.TimeField(blank=True, null=True)
 	home_team = models.ForeignKey(Team, related_name='game_home')
 	away_team = models.ForeignKey(Team, related_name='game_away')
 	home_score = models.IntegerField(blank=True, null=True)
