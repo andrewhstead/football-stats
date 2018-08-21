@@ -16,11 +16,13 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
+from games import views as game_views
 from home import views as home_views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
     url(r'^$', home_views.home_page, name='home'),
+    url(r'^admin/', admin.site.urls),
+    url(r'^results/$', game_views.latest_results, name='latest_results'),
 ]
 
 if settings.DEBUG:

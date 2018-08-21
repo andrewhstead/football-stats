@@ -3,20 +3,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>UK Football Site</title>
-    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/default.css' %}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>UK Football Site</title>
+	<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'css/default.css' %}">
 </head>
 <body>
 
-    <header>
-        <h1>UK Football Site</h1>
-    </header>
+	<header>
 
-    {% block content %}
-    {% endblock %}
+		<h1>
+			UK Football Site
+		</h1>
+
+		<nav id="main-menu">
+			<a class="menu-link" href="{% url 'home' %}">Home Page</a>
+			<a class="menu-link" href="{% url 'latest_results' %}">Latest Results</a>
+		</nav>
+
+	</header>
+
+	{% block content %}
+	{% endblock %}
 
 </body>
 </html>

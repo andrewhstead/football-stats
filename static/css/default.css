@@ -6,10 +6,10 @@ body {
 }
 
 header {
-	background-color: #666666;
+	background-color: #333333;
 	color: white;
 	text-align: center;
-	padding: 0 0 2px 0;
+	margin: 0 0 2px 0;
 	border-bottom: 2px black solid;
 }
 
@@ -17,9 +17,31 @@ h1 {
 	margin: 0;
 }
 
+h2 {
+	margin: 0;
+	text-align: center;
+	font-size: 1.2em;
+	padding: 0 0 3px 0;
+}
+
+/* Styles for navigation links. */
+#main-menu {
+	width: 100%;
+	background-color: #666666;
+	text-align: left;
+}
+.menu-link {
+	color: white;
+	text-decoration: none;
+	padding: 0 0 2px 20px;
+	border-top: 1px black solid;
+	display: block;
+}
+
 /* Styles for game results. */
 .result-list {
-	margin: 5px auto;
+	width: 100%;
+	/*margin: 5px auto;*/
 	border-collapse: collapse;
 }
 
