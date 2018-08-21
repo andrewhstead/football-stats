@@ -41,7 +41,7 @@ class Competition(models.Model):
 	teams = models.ManyToManyField(Team, related_name='teams', blank=True)
 
 	def __unicode__(self):
-		return self.name
+		return unicode(self.name) + ': ' + unicode(self.season)
 
 # Game model for individual matches.
 class Game(models.Model):

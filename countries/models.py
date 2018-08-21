@@ -18,6 +18,7 @@ class Country(models.Model):
 	full_name = models.CharField(max_length=50)
 	short_name = models.CharField(max_length=15)
 	abbreviation = models.CharField(max_length=3, unique=True)
+	flag = models.ImageField(upload_to="images/flags", blank=True, null=True)
 	continent = models.ForeignKey(Continent, related_name='countries')
 
 	def __unicode__(self):

@@ -37,6 +37,12 @@ h2 {
 	border-top: 1px black solid;
 	display: block;
 }
+.page-index {
+	padding: 0 10px;
+}
+.page-link {
+	text-decoration: none;
+}
 
 /* Styles for game results. */
 .result-list {
@@ -76,4 +82,10 @@ h2 {
 
 .game-score {
 	min-width: 30px;
+}
+
+/* Styling for images. */
+.flag-icon {
+	height: 15px;
+	width: 15px;
 }

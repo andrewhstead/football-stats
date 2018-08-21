@@ -7,17 +7,23 @@
 		League Tables
 	</h2>
 
-	{% for league in leagues %}
-		{{ league.name }}<br />
+	<nav class="page-index">
 
-		{% for competition in competitions %}
+		{% for league in leagues %}
+			<img class="flag-icon" src="/media/{{ league.country.flag }}" />
 
-			{% if competition.league == league %}
-				{{ competition.name }}
-			{% endif %}
+			{% for competition in competitions %}
+
+				{% if competition.league == league %}
+					<a class="page-link" href="/tables/{{ competition.country|lower }}/{{ competition.abbreviation|lower }}/{{ competition.season }}/">
+						{{ competition.name }}: {{ competition.season }}
+					</a>
+				{% endif %}
+
+			{% endfor %}
 
 		{% endfor %}
 
-	{% endfor %}
+	</nav>
 
 {% endblock %}
