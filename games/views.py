@@ -19,8 +19,6 @@ def latest_results(request):
 def league_tables(request):
 
 	current_season = Season.objects.latest('id')
-
-	leagues = League.objects.all()
 	competitions = Competition.objects.filter(season=current_season)
 
-	return render(request, "league_tables.html", {"leagues": leagues, "competitions": competitions, "current_season": current_season})
+	return render(request, "league_tables.html", {"competitions": competitions, "current_season": current_season})

@@ -18,7 +18,7 @@
 					<!-- Find which competition ID matches the game competition. IDs are used to reduce database queries. -->
 					{% for competition in competitions %}
 						{% if competition.id == game.competition %}
-							{{ competition.abbreviation }}
+							<img class="flag-icon" src="/media/{{ competition.country.flag }}" /> {{ competition.abbreviation }}
 						{% endif %}
 					{% endfor %}
 				</td>

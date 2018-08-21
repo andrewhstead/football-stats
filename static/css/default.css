@@ -43,6 +43,9 @@ h2 {
 .page-link {
 	text-decoration: none;
 }
+.page-link:visited {
+	color: blue;
+}
 
 /* Styles for game results. */
 .result-list {

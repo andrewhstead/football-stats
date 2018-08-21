@@ -9,18 +9,13 @@
 
 	<nav class="page-index">
 
-		{% for league in leagues %}
-			<img class="flag-icon" src="/media/{{ league.country.flag }}" />
+		{% for competition in competitions %}
 
-			{% for competition in competitions %}
+			<img class="flag-icon" src="/media/{{ competition.country.flag }}" />
 
-				{% if competition.league == league %}
-					<a class="page-link" href="/tables/{{ competition.country|lower }}/{{ competition.abbreviation|lower }}/{{ competition.season }}/">
-						{{ competition.name }}: {{ competition.season }}
-					</a>
-				{% endif %}
-
-			{% endfor %}
+			<a class="page-link" href="/tables/{{ competition.country.abbreviation|lower }}/{{competition.abbreviation|lower }}/{{ competition.season }}/">
+				{{ competition.name }}: {{ competition.season }}
+			</a>
 
 		{% endfor %}
 
