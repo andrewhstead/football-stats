@@ -31,18 +31,31 @@ def competition_table(request, country, competition, season):
 	# Empty list to contain the league table.
 	league_table = []
 
+	# Define the country and season and then use these to select the competition.
 	country = Country.objects.get(abbreviation=country.upper())
 	season = Season.objects.get(name=season)
-
 	competition = Competition.objects.get(country_id=country.id, abbreviation=competition.upper(), season_id=season.id)
 
+	# Set the tie-breaking method to be shown in the league table.
+	# If the first tie-breaker is Goal Average, this will be shown. Otherwise Goal Difference is shown.
 	if competition.tie_breaker_1 == "Goal Average":
 		table_tie_breaker = "GA"
 	else:
 		table_tie_breaker = "GD"
 
-	teams = [team for team in competition.teams.all()]
+	# Convert the competition's tie-breakers for use in table sorting.
+	tie_breaker_1 = competition.tie_breaker_1.lower().replace(" ", "_")
+	if competition.tie_breaker_2:
+		tie_breaker_2 = competition.tie_breaker_1.lower().replace(" ", "_")
+	if competition.tie_breaker_3:
+		tie_breaker_3 = competition.tie_breaker_1.lower().replace(" ", "_")
+	if competition.tie_breaker_4:
+		tie_breaker_4 = competition.tie_breaker_1.lower().replace(" ", "_")
+	if competition.tie_breaker_5:
+		tie_breaker_5 = competition.tie_breaker_1.lower().replace(" ", "_")
 
+	# Select the teams and the games for this competition.
+	teams = [team for team in competition.teams.all()]
 	games = Game.objects.filter(competition=competition)\
 	.values('game_date', 'home_team', 'away_team', 'home_score', 'away_score')
 
@@ -50,20 +63,12 @@ def competition_table(request, country, competition, season):
 	# Floats are used rather than integers in order to facilitate calculations.
 	for team in teams:
 		
-		if len(team.full_name) > 15:
-			team_record = {"name": team.short_name,\
-				"games_played": 0.0,\
-				"games_won": 0.0, "games_drawn": 0.0, "games_lost": 0.0, "goals_for": 0.0, "goals_against": 0.0,\
-				"home_won": 0.0, "home_drawn": 0.0, "home_lost": 0.0, "home_for": 0.0, "home_against": 0.0,\
-				"away_won": 0.0, "away_drawn": 0.0, "away_lost": 0.0, "away_for": 0.0, "away_against": 0.0,\
-				"tie_breaker": 0.0, "points": 0.0}
-		else:
-			team_record = {"name": team.full_name,\
-				"games_played": 0.0,\
-				"games_won": 0.0, "games_drawn": 0.0, "games_lost": 0.0, "goals_for": 0.0, "goals_against": 0.0,\
-				"home_won": 0.0, "home_drawn": 0.0, "home_lost": 0.0, "home_for": 0.0, "home_against": 0.0,\
-				"away_won": 0.0, "away_drawn": 0.0, "away_lost": 0.0, "away_for": 0.0, "away_against": 0.0,\
-				"tie_breaker": 0.0, "points": 0.0}
+		team_record = {"name": team.short_name,\
+			"games_played": 0.0,\
+			"games_won": 0.0, "games_drawn": 0.0, "games_lost": 0.0, "goals_for": 0.0, "goals_against": 0.0,\
+			"home_won": 0.0, "home_drawn": 0.0, "home_lost": 0.0, "home_for": 0.0, "home_against": 0.0,\
+			"away_won": 0.0, "away_drawn": 0.0, "away_lost": 0.0, "away_for": 0.0, "away_against": 0.0,\
+			"goal_average": 0.0, "goal_difference": 0.0, "points": 0.0}
 
 		# Next get the team's completed home games and away games for the current year.
 		home_games = [game for game in games if game['home_team'] == team.id]
@@ -103,14 +108,15 @@ def competition_table(request, country, competition, season):
 				team_record["games_lost"] += 1
 				team_record["away_lost"] += 1
 
-		if competition.tie_breaker_1 == "Goal Average":
-			if team_record["goals_against"] > 0.0:
-				team_record["tie_breaker"] = team_record["goals_for"] / team_record["goals_against"]
-		else:
-			team_record["tie_breaker"] = team_record["goals_for"] - team_record["goals_against"]
+		if team_record["goals_against"] > 0.0:
+				team_record["goal_average"] = team_record["goals_for"] / team_record["goals_against"]
+		team_record["goal_difference"] = team_record["goals_for"] - team_record["goals_against"]
 
 		# Add the team's updated record to the league table.
 		league_table.append(team_record)
+
+		# Sort the league table by all chosen tiebreaking criteria.
+		league_table.sort(key=lambda team_record:[team_record["points"], team_record[tie_breaker_1]], reverse=True)
 
 	return render(request, "competition_table.html",\
 		{"competition": competition, "teams": teams, "league_table": league_table, "table_tie_breaker": table_tie_breaker})

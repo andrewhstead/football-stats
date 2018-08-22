@@ -82,9 +82,9 @@ h2 {
 /* Styles for league tables. */
 .league-table {
 	width: 100%;
-	margin-top: 3px;
+	margin: 3px auto;
 	border-collapse: collapse;
-	max-width: 600px;
+	max-width: 400px;
 }
 .league-table tr:nth-of-type(odd) {
     background-color: #ccddaa;

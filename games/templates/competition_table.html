@@ -22,7 +22,7 @@
 			<th>Pts</th>
 		</tr>
 
-	{% for team in league_table|dictsort:"name"|dictsort:"goals_for"|dictsortreversed:"tie_breaker"|dictsortreversed:"points" %}
+	{% for team in league_table %}
 
 		<tr>
 
@@ -60,9 +60,9 @@
 
 			<td class="center-align">
 				{% if table_tie_breaker == "GA" %}
-					{{ team.tie_breaker|floatformat:2 }}
+					{{ team.goal_average|floatformat:2 }}
 				{% else %}
-					{{ team.tie_breaker|floatformat:0 }}
+					{{ team.goal_difference|floatformat:0 }}
 				{% endif %}
 			</td>
 
