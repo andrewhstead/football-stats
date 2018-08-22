@@ -7,10 +7,69 @@
 		{{ competition }}
 	</h2>
 
-	{% for team in teams %}
+	<table class="league-table">
 
-		{{ team.full_name}}<br />
+		<tr>
+			<th>Pos</th>
+			<th></th>
+			<th>P</th>
+			<th>W</th>
+			<th>D</th>
+			<th>L</th>
+			<th>F</th>
+			<th>A</th>
+			<th>GA</th>
+			<th>Pts</th>
+		</tr>
+
+	{% for team in league_table|dictsort:"name"|dictsort:"goals_for"|dictsortreversed:"tie_breaker"|dictsortreversed:"points" %}
+
+		<tr>
+
+			<td class="center-align">
+				{{ forloop.counter }}
+			</td>
+
+			<td>
+				{{ team.name }}
+			</td>
+
+			<td class="center-align">
+				{{ team.games_played|floatformat:0 }}
+			</td>
+
+			<td class="center-align">
+				{{ team.games_won|floatformat:0 }}
+			</td>
+
+			<td class="center-align">
+				{{ team.games_drawn|floatformat:0 }}
+			</td>
+
+			<td class="center-align">
+				{{ team.games_lost|floatformat:0 }}
+			</td>
+
+			<td class="center-align">
+				{{ team.goals_for|floatformat:0 }}
+			</td>
+
+			<td class="center-align">
+				{{ team.goals_against|floatformat:0 }}
+			</td>
+
+			<td class="center-align">
+				{{ team.tie_breaker|floatformat:2 }}
+			</td>
+
+			<td class="center-align">
+				{{ team.points|floatformat:0 }}
+			</td>
+
+		</tr>
 
 	{% endfor %}
+
+	</table>
 
 {% endblock %}

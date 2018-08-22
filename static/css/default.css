@@ -47,42 +47,72 @@ h2 {
 	color: blue;
 }
 
-/* Styles for game results. */
-.result-list {
+/* Styles for results tables. */
+.result-table {
 	width: 100%;
-	/*margin: 5px auto;*/
+	margin-top: 3px;
 	border-collapse: collapse;
 }
-
-.result-list tr:nth-of-type(odd) {
+.result-table tr:nth-of-type(odd) {
     background: #ccddaa;
 }
-
-.result-list tr:nth-of-type(even) {
+.result-table tr:nth-of-type(even) {
     background: #eeffcc;
 }
-
-.result-list tr {
+.result-table tr {
 	border-top: 1px solid #556633;
 	padding: 0 5px 2px 5px;
 }
-
-.result-list tr:last-of-type {
+.result-table tr:last-of-type {
 	border-bottom: 1px solid #556633;
 }
-
-.result-list td {
+.result-table td {
 	margin: 0 2px;
 }
-
 .right-align {
 	text-align: right;
 }
-
 .center-align {
 	text-align: center;
 }
+.game-score {
+	min-width: 30px;
+}
 
+/* Styles for league tables. */
+.league-table {
+	width: 100%;
+	margin-top: 3px;
+	border-collapse: collapse;
+	max-width: 600px;
+}
+.league-table tr:nth-of-type(odd) {
+    background-color: #ccddaa;
+}
+.league-table tr:nth-of-type(even) {
+    background-color: #eeffcc;
+}
+.league-table tr:first-child {
+    background-color: #889966;
+    color: white;
+    font-weight: bold;
+}
+.league-table tr {
+	border-top: 1px solid #556633;
+	padding: 0 5px 2px 5px;
+}
+.league-table tr:last-of-type {
+	border-bottom: 1px solid #556633;
+}
+.league-table td {
+	margin: 0 2px;
+}
+.right-align {
+	text-align: right;
+}
+.center-align {
+	text-align: center;
+}
 .game-score {
 	min-width: 30px;
 }

@@ -28,10 +28,71 @@ def league_tables(request):
 # Show the league table for the given competition.
 def competition_table(request, country, competition, season):
 
+	# Empty list to contain the league table.
+	league_table = []
+
 	country = Country.objects.get(abbreviation=country.upper())
 	season = Season.objects.get(name=season)
 
 	competition = Competition.objects.get(country_id=country.id, abbreviation=competition.upper(), season_id=season.id)
 	teams = [team for team in competition.teams.all()]
 
-	return render(request, "competition_table.html", {"competition": competition, "teams": teams})
+	games = Game.objects.filter(competition=competition)\
+	.values('game_date', 'home_team', 'away_team', 'home_score', 'away_score')
+
+	# Construct an dictionary for each team's playing record with all statistics set to 0.
+	# Floats are used rather than integers in order to facilitate calculations.
+	for team in teams:
+		team_record = {"name": team.short_name,\
+			"games_played": 0.0,\
+			"games_won": 0.0, "games_drawn": 0.0, "games_lost": 0.0, "goals_for": 0.0, "goals_against": 0.0,\
+			"home_won": 0.0, "home_drawn": 0.0, "home_lost": 0.0, "home_for": 0.0, "home_against": 0.0,\
+			"away_won": 0.0, "away_drawn": 0.0, "away_lost": 0.0, "away_for": 0.0, "away_against": 0.0,\
+			"tie_breaker": 0.0, "points": 0.0}
+
+		# Next get the team's completed home games and away games for the current year.
+		home_games = [game for game in games if game['home_team'] == team.id]
+		away_games = [game for game in games if game['away_team'] == team.id]
+
+		# For each home game, add the game result and score to the team's record.
+		for game in home_games:
+			team_record["games_played"] += 1
+			team_record["goals_for"] += game['home_score']
+			team_record["goals_against"] += game['away_score']
+			if game['home_score'] > game['away_score']:
+				team_record["games_won"] += 1
+				team_record["home_won"] += 1
+				team_record["points"] += 2
+			if game['home_score'] == game['away_score']:
+				team_record["games_drawn"] += 1
+				team_record["home_drawn"] += 1
+				team_record["points"] += 1
+			if game['home_score'] < game['away_score']:
+				team_record["games_lost"] += 1
+				team_record["home_lost"] += 1
+
+		# For each away game, add the game result and score to the team's record.
+		for game in away_games:
+			team_record["games_played"] += 1
+			team_record["goals_for"] += game['away_score']
+			team_record["goals_against"] += game['home_score']
+			if game['home_score'] < game['away_score']:
+				team_record["games_won"] += 1
+				team_record["away_won"] += 1
+				team_record["points"] += 2
+			if game['home_score'] == game['away_score']:
+				team_record["games_drawn"] += 1
+				team_record["away_drawn"] += 1
+				team_record["points"] += 1
+			if game['home_score'] > game['away_score']:
+				team_record["games_lost"] += 1
+				team_record["away_lost"] += 1
+
+		if team_record["goals_against"] > 0.0:
+			team_record["tie_breaker"] = team_record["goals_for"] / team_record["goals_against"]
+
+		# Add the team's updated record to the league table.
+		league_table.append(team_record)
+
+	return render(request, "competition_table.html",\
+		{"competition": competition, "teams": teams, "league_table": league_table, "games": games})
