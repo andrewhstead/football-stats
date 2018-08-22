@@ -56,6 +56,12 @@ class Competition(models.Model):
 	top_secondary_places = models.IntegerField(blank=True, null=True)
 	bottom_primary_places = models.IntegerField(blank=True, null=True)
 	bottom_secondary_places = models.IntegerField(blank=True, null=True)
+	home_win_points = models.IntegerField(default=3)
+	away_win_points = models.IntegerField(default=3)
+	home_draw_points = models.IntegerField(default=1)
+	away_draw_points = models.IntegerField(default=1)
+	home_loss_points = models.IntegerField(default=0)
+	away_loss_points = models.IntegerField(default=0)
 
 	def __unicode__(self):
 		return unicode(self.name) + ': ' + unicode(self.season)

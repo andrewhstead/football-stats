@@ -82,14 +82,15 @@ def competition_table(request, country, competition, season):
 			if game['home_score'] > game['away_score']:
 				team_record["games_won"] += 1
 				team_record["home_won"] += 1
-				team_record["points"] += 2
+				team_record["points"] += competition.home_win_points
 			if game['home_score'] == game['away_score']:
 				team_record["games_drawn"] += 1
 				team_record["home_drawn"] += 1
-				team_record["points"] += 1
+				team_record["points"] += competition.home_draw_points
 			if game['home_score'] < game['away_score']:
 				team_record["games_lost"] += 1
 				team_record["home_lost"] += 1
+				team_record["points"] += competition.home_loss_points
 
 		# For each away game, add the game result and score to the team's record.
 		for game in away_games:
@@ -99,15 +100,17 @@ def competition_table(request, country, competition, season):
 			if game['home_score'] < game['away_score']:
 				team_record["games_won"] += 1
 				team_record["away_won"] += 1
-				team_record["points"] += 2
+				team_record["points"] += competition.away_win_points
 			if game['home_score'] == game['away_score']:
 				team_record["games_drawn"] += 1
 				team_record["away_drawn"] += 1
-				team_record["points"] += 1
+				team_record["points"] += competition.away_draw_points
 			if game['home_score'] > game['away_score']:
 				team_record["games_lost"] += 1
 				team_record["away_lost"] += 1
+				team_record["points"] += competition.away_loss_points
 
+		# Set up the team's goal average and goal difference.
 		if team_record["goals_against"] > 0.0:
 				team_record["goal_average"] = team_record["goals_for"] / team_record["goals_against"]
 		team_record["goal_difference"] = team_record["goals_for"] - team_record["goals_against"]
