@@ -13,7 +13,7 @@
 
 			<img class="flag-icon" src="/media/{{ competition.country.flag }}" />
 
-			<a class="page-link" href="/tables/{{ competition.country.abbreviation|lower }}/{{competition.abbreviation|lower }}/{{ competition.season }}/">
+			<a class="page-link" href="{% url 'competition_table' competition.country.abbreviation|lower competition.abbreviation|lower competition.season %}">
 				{{ competition.name }}: {{ competition.season }}
 			</a>
 
