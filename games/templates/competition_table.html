@@ -18,7 +18,7 @@
 			<th>L</th>
 			<th>F</th>
 			<th>A</th>
-			<th>GA</th>
+			<th>{{ table_tie_breaker }}</th>
 			<th>Pts</th>
 		</tr>
 
@@ -59,7 +59,11 @@
 			</td>
 
 			<td class="center-align">
-				{{ team.tie_breaker|floatformat:2 }}
+				{% if table_tie_breaker == "GA" %}
+					{{ team.tie_breaker|floatformat:2 }}
+				{% else %}
+					{{ team.tie_breaker|floatformat:0 }}
+				{% endif %}
 			</td>
 
 			<td class="center-align">

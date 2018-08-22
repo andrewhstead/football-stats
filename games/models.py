@@ -11,6 +11,14 @@ STATUS_OPTIONS = (
     ('Completed', "Completed"),
 )
 
+# The options for tie-breakers which can be used in leagues.
+TIE_BREAKERS = (
+    ('Goal Average', "Goal Average"),
+    ('Goal Difference', "Goal Difference"),
+    ('Goals Scored', "Goals Scored"),
+    ('Games Won', "Games Won"),
+)
+
 # Create your models here.
 
 # League model for overall competitions.
@@ -39,6 +47,15 @@ class Competition(models.Model):
 	name = models.CharField(max_length=25)
 	abbreviation = models.CharField(max_length=3)
 	teams = models.ManyToManyField(Team, related_name='teams', blank=True)
+	tie_breaker_1 = models.CharField(max_length=25, choices=TIE_BREAKERS, default="Goal Difference")
+	tie_breaker_2 = models.CharField(max_length=25, choices=TIE_BREAKERS, blank=True, null=True)
+	tie_breaker_3 = models.CharField(max_length=25, choices=TIE_BREAKERS, blank=True, null=True)
+	tie_breaker_4 = models.CharField(max_length=25, choices=TIE_BREAKERS, blank=True, null=True)
+	tie_breaker_5 = models.CharField(max_length=25, choices=TIE_BREAKERS, blank=True, null=True)
+	top_primary_places = models.IntegerField(blank=True, null=True)
+	top_secondary_places = models.IntegerField(blank=True, null=True)
+	bottom_primary_places = models.IntegerField(blank=True, null=True)
+	bottom_secondary_places = models.IntegerField(blank=True, null=True)
 
 	def __unicode__(self):
 		return unicode(self.name) + ': ' + unicode(self.season)

@@ -35,6 +35,12 @@ def competition_table(request, country, competition, season):
 	season = Season.objects.get(name=season)
 
 	competition = Competition.objects.get(country_id=country.id, abbreviation=competition.upper(), season_id=season.id)
+
+	if competition.tie_breaker_1 == "Goal Average":
+		table_tie_breaker = "GA"
+	else:
+		table_tie_breaker = "GD"
+
 	teams = [team for team in competition.teams.all()]
 
 	games = Game.objects.filter(competition=competition)\
@@ -43,12 +49,21 @@ def competition_table(request, country, competition, season):
 	# Construct an dictionary for each team's playing record with all statistics set to 0.
 	# Floats are used rather than integers in order to facilitate calculations.
 	for team in teams:
-		team_record = {"name": team.short_name,\
-			"games_played": 0.0,\
-			"games_won": 0.0, "games_drawn": 0.0, "games_lost": 0.0, "goals_for": 0.0, "goals_against": 0.0,\
-			"home_won": 0.0, "home_drawn": 0.0, "home_lost": 0.0, "home_for": 0.0, "home_against": 0.0,\
-			"away_won": 0.0, "away_drawn": 0.0, "away_lost": 0.0, "away_for": 0.0, "away_against": 0.0,\
-			"tie_breaker": 0.0, "points": 0.0}
+		
+		if len(team.full_name) > 15:
+			team_record = {"name": team.short_name,\
+				"games_played": 0.0,\
+				"games_won": 0.0, "games_drawn": 0.0, "games_lost": 0.0, "goals_for": 0.0, "goals_against": 0.0,\
+				"home_won": 0.0, "home_drawn": 0.0, "home_lost": 0.0, "home_for": 0.0, "home_against": 0.0,\
+				"away_won": 0.0, "away_drawn": 0.0, "away_lost": 0.0, "away_for": 0.0, "away_against": 0.0,\
+				"tie_breaker": 0.0, "points": 0.0}
+		else:
+			team_record = {"name": team.full_name,\
+				"games_played": 0.0,\
+				"games_won": 0.0, "games_drawn": 0.0, "games_lost": 0.0, "goals_for": 0.0, "goals_against": 0.0,\
+				"home_won": 0.0, "home_drawn": 0.0, "home_lost": 0.0, "home_for": 0.0, "home_against": 0.0,\
+				"away_won": 0.0, "away_drawn": 0.0, "away_lost": 0.0, "away_for": 0.0, "away_against": 0.0,\
+				"tie_breaker": 0.0, "points": 0.0}
 
 		# Next get the team's completed home games and away games for the current year.
 		home_games = [game for game in games if game['home_team'] == team.id]
@@ -88,11 +103,14 @@ def competition_table(request, country, competition, season):
 				team_record["games_lost"] += 1
 				team_record["away_lost"] += 1
 
-		if team_record["goals_against"] > 0.0:
-			team_record["tie_breaker"] = team_record["goals_for"] / team_record["goals_against"]
+		if competition.tie_breaker_1 == "Goal Average":
+			if team_record["goals_against"] > 0.0:
+				team_record["tie_breaker"] = team_record["goals_for"] / team_record["goals_against"]
+		else:
+			team_record["tie_breaker"] = team_record["goals_for"] - team_record["goals_against"]
 
 		# Add the team's updated record to the league table.
 		league_table.append(team_record)
 
 	return render(request, "competition_table.html",\
-		{"competition": competition, "teams": teams, "league_table": league_table, "games": games})
+		{"competition": competition, "teams": teams, "league_table": league_table, "table_tie_breaker": table_tie_breaker})
