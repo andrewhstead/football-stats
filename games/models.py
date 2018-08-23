@@ -62,10 +62,10 @@ class Competition(models.Model):
 	tie_breaker_4 = models.CharField(max_length=25, choices=TIE_BREAKERS, default="Name")
 	tie_breaker_5 = models.CharField(max_length=25, choices=TIE_BREAKERS, default="Name")
 	# Places to indicate promotion and relegation issues etc.
-	top_primary_places = models.IntegerField(blank=True, null=True)
-	top_secondary_places = models.IntegerField(blank=True, null=True)
-	bottom_primary_places = models.IntegerField(blank=True, null=True)
-	bottom_secondary_places = models.IntegerField(blank=True, null=True)
+	top_primary_places = models.PositiveIntegerField(default=0)
+	top_secondary_places = models.PositiveIntegerField(default=0)
+	bottom_primary_places = models.PositiveIntegerField(default=0)
+	bottom_secondary_places = models.PositiveIntegerField(default=0)
 
 	def __unicode__(self):
 		return unicode(self.name) + ' ' + unicode(self.season)

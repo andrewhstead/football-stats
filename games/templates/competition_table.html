@@ -12,6 +12,7 @@
 	<!-- Show the league table. -->
 	<table class="league-table">
 
+		<!-- Table header row. -->
 		<tr>
 			<th>Pos</th>
 			<th></th>
@@ -27,53 +28,63 @@
 
 	{% for team in league_table %}
 
-		<tr>
+		<!-- Set up the CSS classes for rows which need to be highlighted. -->
+		{% if forloop.counter in top_primary %}
+			<tr class="top-primary">
+		{% elif forloop.counter in top_secondary %}
+			<tr class="top-secondary">
+		{% elif forloop.counter in bottom_secondary %}
+			<tr class="bottom-secondary">
+		{% elif forloop.counter in bottom_primary %}
+			<tr class="bottom-primary">
+		{% endif %}
 
-			<td class="center-align">
-				{{ forloop.counter }}
-			</td>
+				<!-- Show the team's record. -->
+				<td class="center-align">
+					{{ forloop.counter }}
+				</td>
 
-			<td>
-				{{ team.name }}
-			</td>
+				<td>
+					{{ team.name }}
+				</td>
 
-			<td class="center-align">
-				{{ team.games_played|floatformat:0 }}
-			</td>
+				<td class="center-align">
+					{{ team.games_played|floatformat:0 }}
+				</td>
 
-			<td class="center-align">
-				{{ team.games_won|floatformat:0 }}
-			</td>
+				<td class="center-align">
+					{{ team.games_won|floatformat:0 }}
+				</td>
 
-			<td class="center-align">
-				{{ team.games_drawn|floatformat:0 }}
-			</td>
+				<td class="center-align">
+					{{ team.games_drawn|floatformat:0 }}
+				</td>
 
-			<td class="center-align">
-				{{ team.games_lost|floatformat:0 }}
-			</td>
+				<td class="center-align">
+					{{ team.games_lost|floatformat:0 }}
+				</td>
 
-			<td class="center-align">
-				{{ team.goals_for|floatformat:0 }}
-			</td>
+				<td class="center-align">
+					{{ team.goals_for|floatformat:0 }}
+				</td>
 
-			<td class="center-align">
-				{{ team.goals_against|floatformat:0 }}
-			</td>
+				<td class="center-align">
+					{{ team.goals_against|floatformat:0 }}
+				</td>
 
-			<td class="center-align">
-				{% if table_tie_breaker == "GA" %}
-					{{ team.goal_average|floatformat:2 }}
-				{% else %}
-					{{ team.goal_difference|floatformat:0 }}
-				{% endif %}
-			</td>
+				<td class="center-align">
+					{% if table_tie_breaker == "GA" %}
+						{{ team.goal_average|floatformat:2 }}
+					{% else %}
+						{{ team.goal_difference|floatformat:0 }}
+					{% endif %}
+				</td>
 
-			<td class="center-align">
-				{{ team.points|floatformat:0 }}
-			</td>
+				<td class="center-align">
+					{{ team.points|floatformat:0 }}
+				</td>
 
-		</tr>
+			</tr>
 
 	{% endfor %}
 
@@ -85,6 +96,7 @@
 		{% if adjustments %}
 
 			{% for adjustment in adjustments %}
+				NB:
 				{{ adjustment.team }} 
 					{% if adjustment.points > 0 %}
 						awarded
@@ -95,9 +107,13 @@
 					{% if adjustment.points|abs == 1 %}
 						point.
 					{% else %}
-						points.
+						points
 					{% endif %}
-				<br />
+				{% if forloop.last %}
+					.
+				{% else %}
+					,
+				{% endif %}
 			{% endfor %}
 
 		{% endif %}

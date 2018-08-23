@@ -86,23 +86,18 @@ h2 {
 	border-collapse: collapse;
 	max-width: 400px;
 }
-.league-table tr:nth-of-type(odd) {
-    background-color: #ccddaa;
-}
-.league-table tr:nth-of-type(even) {
-    background-color: #eeffcc;
-}
 .league-table tr:first-child {
     background-color: #889966;
     color: white;
     font-weight: bold;
 }
 .league-table tr {
-	border-top: 1px solid #556633;
+    background-color: #ccddaa;
+	border-top: 1px solid #666666;
 	padding: 0 5px 2px 5px;
 }
 .league-table tr:last-of-type {
-	border-bottom: 1px solid #556633;
+	border-bottom: 1px solid #666666;
 }
 .league-table td {
 	margin: 0 2px;
@@ -116,11 +111,27 @@ h2 {
 .game-score {
 	min-width: 30px;
 }
+.top-primary td {
+	background-color: #ffcc00;
+	font-weight: bold;
+}
+.top-secondary td {
+	background-color: #ffff66;
+}
+.bottom-primary td {
+	background-color: #990000;
+	color: white;
+	font-weight: bold;
+}
+.bottom-secondary td {
+	background-color: #ffcccc;
+}
 
 /* Styling for information notes. */
 .competition-details {
 	max-width: 400px;
 	margin: auto;
+	padding: 0 5px;
 	font-size: 0.8em;
 }
 

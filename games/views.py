@@ -60,6 +60,19 @@ def competition_table(request, country, competition, season):
 	games = Game.objects.filter(competition=competition)\
 	.values('game_date', 'home_team', 'away_team', 'home_score', 'away_score')
 
+	# Construct the promotion and relegation zones or qualifying positions for the table.
+	team_total = teams.count()
+	positions = range(1, (team_total + 1))
+
+	top_primary = positions[0:competition.top_primary_places]
+	top_secondary = positions[competition.top_primary_places:(competition.top_primary_places + competition.top_secondary_places)]
+
+	bottom_primary = positions[(team_total - competition.bottom_primary_places):team_total]
+	if competition.bottom_primary_places == 0:
+		bottom_secondary = positions[-competition.bottom_secondary_places:]
+	else:
+		bottom_secondary = positions[-(competition.bottom_secondary_places + competition.bottom_primary_places):-competition.bottom_primary_places]
+
 	# Construct an dictionary for each team's playing record with all statistics set to 0.
 	# Floats are used rather than integers in order to facilitate calculations.
 	for team in teams:
@@ -131,4 +144,6 @@ def competition_table(request, country, competition, season):
 
 	return render(request, "competition_table.html",\
 		{"competition": competition, "teams": teams, "league_table": league_table,\
-		 "table_tie_breaker": table_tie_breaker, "adjustments": adjustments})
+		 "table_tie_breaker": table_tie_breaker, "adjustments": adjustments,\
+		  "top_primary": top_primary, "top_secondary": top_secondary,\
+		  "bottom_primary": bottom_primary, "bottom_secondary": bottom_secondary})
