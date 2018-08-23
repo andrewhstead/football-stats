@@ -17,6 +17,7 @@ TIE_BREAKERS = (
     ('Goal Difference', "Goal Difference"),
     ('Goals Scored', "Goals Scored"),
     ('Games Won', "Games Won"),
+    ('Name', "Name"),
 )
 
 # Create your models here.
@@ -47,21 +48,23 @@ class Competition(models.Model):
 	name = models.CharField(max_length=25)
 	abbreviation = models.CharField(max_length=3)
 	teams = models.ManyToManyField(Team, related_name='teams', blank=True)
-	tie_breaker_1 = models.CharField(max_length=25, choices=TIE_BREAKERS, default="Goal Difference")
-	tie_breaker_2 = models.CharField(max_length=25, choices=TIE_BREAKERS, blank=True, null=True)
-	tie_breaker_3 = models.CharField(max_length=25, choices=TIE_BREAKERS, blank=True, null=True)
-	tie_breaker_4 = models.CharField(max_length=25, choices=TIE_BREAKERS, blank=True, null=True)
-	tie_breaker_5 = models.CharField(max_length=25, choices=TIE_BREAKERS, blank=True, null=True)
-	top_primary_places = models.IntegerField(blank=True, null=True)
-	top_secondary_places = models.IntegerField(blank=True, null=True)
-	bottom_primary_places = models.IntegerField(blank=True, null=True)
-	bottom_secondary_places = models.IntegerField(blank=True, null=True)
 	home_win_points = models.IntegerField(default=3)
 	away_win_points = models.IntegerField(default=3)
 	home_draw_points = models.IntegerField(default=1)
 	away_draw_points = models.IntegerField(default=1)
 	home_loss_points = models.IntegerField(default=0)
 	away_loss_points = models.IntegerField(default=0)
+	# Tie breakers default to 'Name' to ensure alphabetical sorting once all other criteria have been applied.
+	tie_breaker_1 = models.CharField(max_length=25, choices=TIE_BREAKERS, default="Name")
+	tie_breaker_2 = models.CharField(max_length=25, choices=TIE_BREAKERS, default="Name")
+	tie_breaker_3 = models.CharField(max_length=25, choices=TIE_BREAKERS, default="Name")
+	tie_breaker_4 = models.CharField(max_length=25, choices=TIE_BREAKERS, default="Name")
+	tie_breaker_5 = models.CharField(max_length=25, choices=TIE_BREAKERS, default="Name")
+	# Places to indicate promotion and relegation issues etc.
+	top_primary_places = models.IntegerField(blank=True, null=True)
+	top_secondary_places = models.IntegerField(blank=True, null=True)
+	bottom_primary_places = models.IntegerField(blank=True, null=True)
+	bottom_secondary_places = models.IntegerField(blank=True, null=True)
 
 	def __unicode__(self):
 		return unicode(self.name) + ': ' + unicode(self.season)

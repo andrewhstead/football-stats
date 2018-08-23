@@ -46,16 +46,16 @@ def competition_table(request, country, competition, season):
 	# Convert the competition's tie-breakers for use in table sorting.
 	tie_breaker_1 = competition.tie_breaker_1.lower().replace(" ", "_")
 	if competition.tie_breaker_2:
-		tie_breaker_2 = competition.tie_breaker_1.lower().replace(" ", "_")
+		tie_breaker_2 = competition.tie_breaker_2.lower().replace(" ", "_")	
 	if competition.tie_breaker_3:
-		tie_breaker_3 = competition.tie_breaker_1.lower().replace(" ", "_")
+		tie_breaker_3 = competition.tie_breaker_3.lower().replace(" ", "_")
 	if competition.tie_breaker_4:
-		tie_breaker_4 = competition.tie_breaker_1.lower().replace(" ", "_")
+		tie_breaker_4 = competition.tie_breaker_4.lower().replace(" ", "_")
 	if competition.tie_breaker_5:
-		tie_breaker_5 = competition.tie_breaker_1.lower().replace(" ", "_")
+		tie_breaker_5 = competition.tie_breaker_5.lower().replace(" ", "_")
 
 	# Select the teams and the games for this competition.
-	teams = [team for team in competition.teams.all()]
+	teams = competition.teams.all()
 	games = Game.objects.filter(competition=competition)\
 	.values('game_date', 'home_team', 'away_team', 'home_score', 'away_score')
 
@@ -118,8 +118,9 @@ def competition_table(request, country, competition, season):
 		# Add the team's updated record to the league table.
 		league_table.append(team_record)
 
-		# Sort the league table by all chosen tiebreaking criteria.
-		league_table.sort(key=lambda team_record:[team_record["points"], team_record[tie_breaker_1]], reverse=True)
+	# Sort the league table by all chosen tiebreaking criteria.
+	league_table.sort(key=lambda team_record:[team_record["points"], team_record[tie_breaker_1], team_record[tie_breaker_2],\
+	 team_record[tie_breaker_3], team_record[tie_breaker_4], team_record[tie_breaker_5]], reverse=True)
 
 	return render(request, "competition_table.html",\
 		{"competition": competition, "teams": teams, "league_table": league_table, "table_tie_breaker": table_tie_breaker})
