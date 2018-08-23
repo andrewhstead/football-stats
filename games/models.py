@@ -21,7 +21,6 @@ TIE_BREAKERS = (
 )
 
 # Create your models here.
-
 # League model for overall competitions.
 class League(models.Model):
 	country = models.ForeignKey(Country, related_name='leagues')
@@ -32,6 +31,7 @@ class League(models.Model):
 	def __unicode__(self):
 		return self.name
 
+
 # Season model.
 class Season(models.Model):
 	name = models.CharField(max_length=10)
@@ -39,6 +39,7 @@ class Season(models.Model):
 
 	def __unicode__(self):
 		return self.name
+
 
 # Competition model for individual league seasons.
 class Competition(models.Model):
@@ -67,7 +68,8 @@ class Competition(models.Model):
 	bottom_secondary_places = models.IntegerField(blank=True, null=True)
 
 	def __unicode__(self):
-		return unicode(self.name) + ': ' + unicode(self.season)
+		return unicode(self.name) + ' ' + unicode(self.season)
+
 
 # Game model for individual matches.
 class Game(models.Model):
@@ -82,3 +84,14 @@ class Game(models.Model):
 
 	def __unicode__(self):
 		return unicode(self.game_date) + ': ' + unicode(self.home_team) + ' v ' + unicode(self.away_team)
+
+
+# Points adjustment model.
+class Adjustment(models.Model):
+	competition = models.ForeignKey(Competition, related_name='adjustments')
+	team = models.ForeignKey(Team, related_name='adjustments')
+	points = models.IntegerField(default=0)
+	date = models.DateField(blank=True, null=True)
+
+	def __unicode__(self):
+		return unicode(self.competition) + ' - ' + unicode(self.team) + ' (' + unicode(self.points) + ')' 

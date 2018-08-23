@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load mathfilters %}
 
 {% block content %}
 
+	<!-- Competition Title -->
 	<h2>
 		{{ competition }}
 	</h2>
 
+	<!-- Show the league table. -->
 	<table class="league-table">
 
 		<tr>
@@ -75,5 +78,30 @@
 	{% endfor %}
 
 	</table>
+
+	<section class="competition-details">
+
+		<!-- Show the points adjustments if there are any. -->
+		{% if adjustments %}
+
+			{% for adjustment in adjustments %}
+				{{ adjustment.team }} 
+					{% if adjustment.points > 0 %}
+						awarded
+					{% else %}
+						deducted
+					{% endif %}
+				{{ adjustment.points|abs }}
+					{% if adjustment.points|abs == 1 %}
+						point.
+					{% else %}
+						points.
+					{% endif %}
+				<br />
+			{% endfor %}
+
+		{% endif %}
+
+	</section>
 
 {% endblock %}

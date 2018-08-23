@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from models import Game, League, Competition, Season
+from models import Game, League, Competition, Season, Adjustment
 from teams.models import Team
 from countries.models import Country
 
@@ -35,6 +35,7 @@ def competition_table(request, country, competition, season):
 	country = Country.objects.get(abbreviation=country.upper())
 	season = Season.objects.get(name=season)
 	competition = Competition.objects.get(country_id=country.id, abbreviation=competition.upper(), season_id=season.id)
+	adjustments = Adjustment.objects.filter(competition=competition)
 
 	# Set the tie-breaking method to be shown in the league table.
 	# If the first tie-breaker is Goal Average, this will be shown. Otherwise Goal Difference is shown.
@@ -115,6 +116,12 @@ def competition_table(request, country, competition, season):
 				team_record["goal_average"] = team_record["goals_for"] / team_record["goals_against"]
 		team_record["goal_difference"] = team_record["goals_for"] - team_record["goals_against"]
 
+		# Check whether the team has a points adjustment and if so, apply it to their record.
+		for adjustment in adjustments:
+			if adjustment.team == team:
+				team_record["points"] += adjustment.points
+				team_record["name"] += " *"
+
 		# Add the team's updated record to the league table.
 		league_table.append(team_record)
 
@@ -123,4 +130,5 @@ def competition_table(request, country, competition, season):
 	 team_record[tie_breaker_3], team_record[tie_breaker_4], team_record[tie_breaker_5]], reverse=True)
 
 	return render(request, "competition_table.html",\
-		{"competition": competition, "teams": teams, "league_table": league_table, "table_tie_breaker": table_tie_breaker})
+		{"competition": competition, "teams": teams, "league_table": league_table,\
+		 "table_tie_breaker": table_tie_breaker, "adjustments": adjustments})

@@ -117,7 +117,14 @@ h2 {
 	min-width: 30px;
 }
 
-/* Styling for images. */
+/* Styling for information notes. */
+.competition-details {
+	max-width: 400px;
+	margin: auto;
+	font-size: 0.8em;
+}
+
+/* Styles for images. */
 .flag-icon {
 	height: 15px;
 	width: 15px;
