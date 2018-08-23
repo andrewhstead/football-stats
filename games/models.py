@@ -74,6 +74,7 @@ class Competition(models.Model):
 # Game model for individual matches.
 class Game(models.Model):
 	competition = models.ForeignKey(Competition, related_name='games')
+	season = models.ForeignKey(Season, related_name='games')
 	game_status = models.CharField(max_length=10, choices=STATUS_OPTIONS, default="Scheduled")
 	game_date = models.DateField()
 	game_time = models.TimeField(blank=True, null=True)

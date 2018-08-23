@@ -47,69 +47,73 @@ h2 {
 	color: blue;
 }
 
-/* Styles for results tables. */
-.result-table {
-	width: 100%;
-	margin-top: 3px;
-	border-collapse: collapse;
-}
-.result-table tr:nth-of-type(odd) {
-    background: #ccddaa;
-}
-.result-table tr:nth-of-type(even) {
-    background: #eeffcc;
-}
-.result-table tr {
-	border-top: 1px solid #556633;
-	padding: 0 5px 2px 5px;
-}
-.result-table tr:last-of-type {
-	border-bottom: 1px solid #556633;
-}
-.result-table td {
-	margin: 0 2px;
-}
+/* General table styles. */
 .right-align {
 	text-align: right;
 }
 .center-align {
 	text-align: center;
 }
-.game-score {
-	min-width: 30px;
-}
-
-/* Styles for league tables. */
-.league-table {
+.stats-table {
 	width: 100%;
 	margin: 3px auto;
 	border-collapse: collapse;
 	max-width: 400px;
 }
-.league-table tr:first-child {
+.stats-table tr:last-of-type {
+	border-bottom: 1px solid #556633;
+}
+.table-link {
+	color: inherit;
+	text-decoration: none;
+}
+.table-link:hover {
+	text-decoration: underline;
+}
+
+/* Styles for results tables. */
+.results tr:nth-of-type(odd) {
+    background: #ccddaa;
+}
+.results tr:nth-of-type(even) {
+    background: #eeffcc;
+}
+.results tr {
+	border-top: 1px solid #556633;
+	padding: 0 5px 2px 5px;
+}
+.results td {
+	margin: 0 2px;
+}
+.game-score {
+	min-width: 30px;
+}
+.game-detail {
+	min-width: 20px;
+}
+.game-won {
+	background-color: #66cc66;
+}
+.game-drawn {
+	background-color: #cccc66;
+}
+.game-lost {
+	background-color: #cc6666;
+}
+
+/* Styles for league tables. */
+.league tr:first-child {
     background-color: #889966;
     color: white;
     font-weight: bold;
 }
-.league-table tr {
+.league tr {
     background-color: #ccddaa;
 	border-top: 1px solid #666666;
 	padding: 0 5px 2px 5px;
 }
-.league-table tr:last-of-type {
-	border-bottom: 1px solid #666666;
-}
-.league-table td {
+.league td {
 	margin: 0 2px;
-}
-.right-align {
-	text-align: right;
-}
-.center-align {
-	text-align: center;
-}
-.game-score {
-	min-width: 30px;
 }
 .top-primary td {
 	background-color: #ffcc00;
@@ -123,13 +127,6 @@ h2 {
 }
 .bottom-secondary td {
 	background-color: #ffcccc;
-}
-.table-link {
-	color: inherit;
-	text-decoration: none;
-}
-.table-link:hover {
-	text-decoration: underline;
 }
 
 /* Styling for index lists. */
