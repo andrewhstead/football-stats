@@ -4,13 +4,13 @@ from django.db import models
 from countries.models import Country
 
 # Create your models here.
-
 # Club model - a club must have a unique name to identify it throughout the site.
 class Club(models.Model):
 	full_name = models.CharField(max_length=50, unique=True)
 	short_name = models.CharField(max_length=15, unique=True)
 	abbreviation = models.CharField(max_length=3, unique=True)
 	country = models.ForeignKey(Country, related_name='clubs')
+	current_league = models.ForeignKey('games.League', related_name='clubs')
 
 	def __unicode__(self):
 		return self.full_name

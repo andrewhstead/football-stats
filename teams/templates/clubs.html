@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+	<h2>
+		Club Index
+	</h2>
+
+
+	{% for country in countries %}
+		<div class="list-title">
+			<img class="flag-icon" src="/media/{{ country.flag }}" /> {{ country.full_name|upper }}
+		</div>
+
+		<section class="competition-list">
+
+			{% for league in leagues %}
+
+				{% if league.current_clubs|length > 0 %}
+
+					<section class="list-column">
+
+						{% if league.country == country %}
+							<div class="list-header">
+								{{ league.name }}
+							</div>
+
+							<ul class="list-contents">
+								{% for club in league.current_clubs %}
+									<li>
+										{{ club.full_name}}
+									</li>
+								{% endfor %}
+							</ul>
+
+						{% endif %}
+
+					</section>
+
+				{% endif %}
+
+			{% endfor %}
+
+		</section>
+
+	{% endfor %}
+
+{% endblock %}

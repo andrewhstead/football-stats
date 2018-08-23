@@ -113,7 +113,6 @@ h2 {
 }
 .top-primary td {
 	background-color: #ffcc00;
-	font-weight: bold;
 }
 .top-secondary td {
 	background-color: #ffff66;
@@ -121,10 +120,35 @@ h2 {
 .bottom-primary td {
 	background-color: #990000;
 	color: white;
-	font-weight: bold;
 }
 .bottom-secondary td {
 	background-color: #ffcccc;
+}
+
+/* Styling for index lists. */
+.list-title {
+	text-align: center;
+	font-weight: bold;
+	margin: 10px auto;
+	font-size: 1.2em;
+}
+.competition-list {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.list-column {
+	padding: 10px;
+	flex: 1;
+	min-width: 200px;
+}
+.list-header {
+	font-weight: bold;
+	display: block;
+	padding-left: 20px;
+}
+.list-contents {
+	margin: 0;
 }
 
 /* Styling for information notes. */
