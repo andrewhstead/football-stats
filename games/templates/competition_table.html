@@ -45,7 +45,9 @@
 				</td>
 
 				<td>
-					{{ team.name }}
+					<a class="table-link" href="{% url 'team_season' team.abbreviation|lower competition.season %}">
+						{{ team.name }}
+					</a>
 				</td>
 
 				<td class="center-align">
@@ -96,7 +98,7 @@
 		{% if adjustments %}
 
 			{% for adjustment in adjustments %}
-				NB:
+				*
 				{{ adjustment.team }} 
 					{% if adjustment.points > 0 %}
 						awarded
@@ -106,14 +108,7 @@
 				{{ adjustment.points|abs }}
 					{% if adjustment.points|abs == 1 %}
 						point.
-					{% else %}
-						points
-					{% endif %}
-				{% if forloop.last %}
-					.
-				{% else %}
-					,
-				{% endif %}
+					{% else %}points{% endif %}{% if forloop.last %}.{% else %},{% endif %}
 			{% endfor %}
 
 		{% endif %}

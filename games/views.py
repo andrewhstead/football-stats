@@ -77,7 +77,7 @@ def competition_table(request, country, competition, season):
 	# Floats are used rather than integers in order to facilitate calculations.
 	for team in teams:
 		
-		team_record = {"name": team.short_name,\
+		team_record = {"name": team.short_name, "abbreviation": team.club.abbreviation,\
 			"games_played": 0.0,\
 			"games_won": 0.0, "games_drawn": 0.0, "games_lost": 0.0, "goals_for": 0.0, "goals_against": 0.0,\
 			"home_won": 0.0, "home_drawn": 0.0, "home_lost": 0.0, "home_for": 0.0, "home_against": 0.0,\
