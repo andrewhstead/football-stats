@@ -22,7 +22,9 @@
 						<!-- Find which team ID matches the opponent. IDs are used to reduce database queries. -->
 						{% for team in teams %}
 							{% if team.id == game.opponent %}
-								{{ team.full_name }}
+								<a class="table-link" href="{% url 'team_season' team.abbreviation|lower season %}">
+									{{ team.full_name }}
+								</a>
 							{% endif %}
 						{% endfor %}
 					</td>
