@@ -23,7 +23,9 @@
 						<tr>
 
 							<td class="center-align">
-								{{ game.date|date:"d/m/y" }}
+								<a class="table-link" href="{% url 'date_results' game.date|date:'Y' game.date|date:'m' game.date|date:'d' %}">
+									{{ game.date|date:"d/m/y" }}
+								</a>
 							</td>
 
 							<td>

@@ -5,6 +5,7 @@ from django.shortcuts import render
 from models import Game, League, Competition, Season, Adjustment
 from teams.models import Team
 from countries.models import Country
+import datetime
 
 # Create your views here.
 # The latest results page view.
@@ -14,6 +15,16 @@ def latest_results(request):
 	teams = Team.objects.all()
 
 	return render(request, "latest_results.html", {"games": games, "teams": teams})
+
+
+# View for results on a specific day.
+def date_results(request, day, month, year):
+
+	game_date = datetime.datetime(year=int(year), month=int(month), day=int(day))
+	games = Game.objects.filter(game_date__day=day, game_date__month=month, game_date__year=year)\
+		.values('competition', 'home_team', 'away_team', 'home_score', 'away_score')
+
+	return render(request, "date_results.html", {"game_date": game_date, "games": games})
 
 
 # Show the index of league tables for the current season.
@@ -35,7 +46,7 @@ def competition_table(request, country, competition, season):
 
 	# Empty list to contain the league table.
 	league_table = []
-	
+
 	# Set the tie-breaking method to be shown in the league table.
 	# If the first tie-breaker is Goal Average, this will be shown. Otherwise Goal Difference is shown.
 	if competition.tie_breaker_1 == "Goal Average":

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+	<h2>
+		{{ game_date|date:"l j F Y" }}
+	</h2>
+
+	{% if games %}
+		{{ games }}
+	{% else %}
+		No games played on this date.
+	{% endif %}
+
+{% endblock %}
