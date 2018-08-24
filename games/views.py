@@ -28,15 +28,14 @@ def league_tables(request):
 # Show the league table for the given competition.
 def competition_table(request, country, competition, season):
 
-	# Empty list to contain the league table.
-	league_table = []
-
 	# Define the country and season and then use these to select the competition.
 	country = Country.objects.get(abbreviation=country.upper())
 	season = Season.objects.get(name=season)
 	competition = Competition.objects.get(country_id=country.id, abbreviation=competition.upper(), season_id=season.id)
-	adjustments = Adjustment.objects.filter(competition=competition)
 
+	# Empty list to contain the league table.
+	league_table = []
+	
 	# Set the tie-breaking method to be shown in the league table.
 	# If the first tie-breaker is Goal Average, this will be shown. Otherwise Goal Difference is shown.
 	if competition.tie_breaker_1 == "Goal Average":
@@ -66,12 +65,14 @@ def competition_table(request, country, competition, season):
 
 	top_primary = positions[0:competition.top_primary_places]
 	top_secondary = positions[competition.top_primary_places:(competition.top_primary_places + competition.top_secondary_places)]
-
 	bottom_primary = positions[(team_total - competition.bottom_primary_places):team_total]
 	if competition.bottom_primary_places == 0:
 		bottom_secondary = positions[-competition.bottom_secondary_places:]
 	else:
 		bottom_secondary = positions[-(competition.bottom_secondary_places + competition.bottom_primary_places):-competition.bottom_primary_places]
+
+	# Select any points adjustments which apply to this competition.
+	adjustments = Adjustment.objects.filter(competition=competition)
 
 	# Construct an dictionary for each team's playing record with all statistics set to 0.
 	# Floats are used rather than integers in order to facilitate calculations.

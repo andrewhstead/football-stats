@@ -8,52 +8,63 @@
 		{{ team }} {{ season }}
 	</h2>
 
-	<table class="stats-table results">
+	{% for competition in team_competitions %}
 
-		<!-- Show a list of results and/or fixtures. -->
-		{% for game in team_games %}
-				<tr>
+		{% if competition.competition_type == "League" %}
 
-					<td class="center-align">
-						{{ game.date|date:"d/m/y" }}
-					</td>
+			<h3>
+				{{ competition.name }}
+			</h3>
 
-					<td>
-						<!-- Find which team ID matches the opponent. IDs are used to reduce database queries. -->
-						{% for team in teams %}
-							{% if team.id == game.opponent %}
-								<a class="table-link" href="{% url 'team_season' team.abbreviation|lower season %}">
-									{{ team.full_name }}
-								</a>
+			<table class="stats-table results">
+
+				<!-- Show a list of results and/or fixtures. -->
+				{% for game in team_games %}
+						<tr>
+
+							<td class="center-align">
+								{{ game.date|date:"d/m/y" }}
+							</td>
+
+							<td>
+								<!-- Find which team ID matches the opponent. IDs are used to reduce database queries. -->
+								{% for team in teams %}
+									{% if team.id == game.opponent %}
+										<a class="table-link" href="{% url 'team_season' team.abbreviation|lower season %}">
+											{{ team.full_name }}
+										</a>
+									{% endif %}
+								{% endfor %}
+							</td>
+
+							<td class="center-align game-detail">
+								{{ game.venue }}
+							</td>
+
+							{% if game.goals_for > game.goals_against %}
+								<td class="center-align game-detail game-won">
+									W
+								</td>
+							{% elif game.goals_for == game.goals_against %}
+								<td class="center-align game-detail game-drawn">
+									D
+								</td>
+							{% else %}
+								<td class="center-align game-detail game-lost">
+									L
+								</td>
 							{% endif %}
-						{% endfor %}
-					</td>
 
-					<td class="center-align game-detail">
-						{{ game.venue }}
-					</td>
+							<td class="center-align game-score">
+								{{ game.goals_for }}-{{ game.goals_against }}
+							</td>
+						</tr>
+				{% endfor %}
 
-					{% if game.goals_for > game.goals_against %}
-						<td class="center-align game-detail game-won">
-							W
-						</td>
-					{% elif game.goals_for == game.goals_against %}
-						<td class="center-align game-detail game-drawn">
-							D
-						</td>
-					{% else %}
-						<td class="center-align game-detail game-lost">
-							L
-						</td>
-					{% endif %}
+			</table>
 
-					<td class="center-align game-score">
-						{{ game.goals_for }}-{{ game.goals_against }}
-					</td>
-				</tr>
-		{% endfor %}
+		{% endif %}
 
-	</table>
-
+	{% endfor %}
 
 {% endblock %}

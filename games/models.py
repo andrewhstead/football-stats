@@ -20,6 +20,12 @@ TIE_BREAKERS = (
     ('Name', "Name"),
 )
 
+# The options for the type of competition.
+COMPETITION_TYPES = (
+    ('League', "League"),
+    ('Cup', "Cup"),
+)
+
 # Create your models here.
 # League model for overall competitions.
 class League(models.Model):
@@ -43,6 +49,7 @@ class Season(models.Model):
 
 # Competition model for individual league seasons.
 class Competition(models.Model):
+	competition_type = models.CharField(max_length=25, choices=COMPETITION_TYPES, default="League")
 	country = models.ForeignKey(Country, related_name='competitions')
 	league = models.ForeignKey(League, related_name='competitions')
 	season = models.ForeignKey(Season, related_name='competitions')

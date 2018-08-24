@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from models import Club, Team
-from games.models import League, Game, Season
+from games.models import League, Game, Season, Competition, Adjustment
 from countries.models import Country
 from django.db.models import Q
 
@@ -28,18 +28,25 @@ def club_index(request):
 # Show the results of a given team for a given season.
 def team_season(request, team, season):
 
-	# Find the club and current team name.
+	# Find the club, current team name and relevant season from the parameters.
 	club = Club.objects.get(abbreviation=team.upper())
 	team = Team.objects.get(club=club)
+	season = Season.objects.get(name=season)
 
 	# Full list of teams to get names of opponents.
 	teams = Team.objects.all()
 
-	season = Season.objects.get(name=season)
-
-	# Empty list to hold the team's games for the season
+	# Empty lists to hold the team's competitions and games for the season
+	team_competitions = []
 	team_games = []
 
+	# Full list of competitions to find those which are both from the relevant season and involve the chosen team.
+	competitions = Competition.objects.filter(season=season)
+	for competition in competitions:
+		if team in competition.teams.all():
+			team_competitions.append(competition)
+
+	# Filter out all games from the relevant season in which the chosen team was involved.
 	games = Game.objects.filter(Q(season=season) & (Q(home_team=team) | Q(away_team=team)))\
 		.values('game_date', 'home_team', 'away_team', 'home_score', 'away_score')\
 		.order_by('game_date', 'game_time')
@@ -58,4 +65,5 @@ def team_season(request, team, season):
 					"date": game['game_date']}
 		team_games.append(details)
 
-	return render(request, "team_season.html", {"team": team, "season": season, "team_games": team_games, "teams": teams})
+	return render(request, "team_season.html", {"team": team, "season": season,\
+	 "team_games": team_games, "teams": teams, "competitions": competitions, "team_competitions": team_competitions})
