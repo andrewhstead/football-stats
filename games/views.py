@@ -21,10 +21,24 @@ def latest_results(request):
 def date_results(request, day, month, year):
 
 	game_date = datetime.datetime(year=int(year), month=int(month), day=int(day))
-	games = Game.objects.filter(game_date__day=day, game_date__month=month, game_date__year=year)\
-		.values('competition', 'home_team', 'away_team', 'home_score', 'away_score')
+	games = Game.objects.filter(game_date=game_date)\
+		.values('competition', 'season', 'home_team', 'away_team', 'home_score', 'away_score')
 
-	return render(request, "date_results.html", {"game_date": game_date, "games": games})
+	teams = Team.objects.all()
+
+	# Empty list to hold the IDs of all competitions in which games were played on the chosen date.
+	date_competitions = []
+
+	# Check each game and if its competition is not in the list, add it.
+	for game in games:
+		if game['competition'] not in date_competitions:
+			date_competitions.append(game['competition'])
+
+	# Filter the competitions to include only those where games were played on the chosen date.
+	competitions = Competition.objects.filter(id__in=date_competitions)
+
+	return render(request, "date_results.html",\
+	 {"game_date": game_date, "games": games, "competitions": competitions, "teams": teams})
 
 
 # Show the index of league tables for the current season.

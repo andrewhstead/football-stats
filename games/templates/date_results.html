@@ -7,10 +7,65 @@
 		{{ game_date|date:"l j F Y" }}
 	</h2>
 
+	<!-- If there were games played on this day, list them by competition. -->
 	{% if games %}
-		{{ games }}
+	
+		{% for competition in competitions %}
+
+			<h3>
+				<a class="table-link" href="{% url 'competition_table' competition.country.abbreviation|lower competition.abbreviation|lower competition.season %}">
+					<img class="flag-icon" src="/media/{{ competition.country.flag }}" /> {{ competition.name }}
+				</a>
+			</h3>
+
+			<table class="stats-table results">
+
+				{% for game in games %}
+
+					{% if game.competition == competition.id %}
+					
+						<!-- Show the result of each game. -->
+						<tr>
+
+							<td class="right-align team-name">
+								<!-- Find which team ID matches the home team. IDs are used to reduce database queries. -->
+								{% for team in teams %}
+									{% if team.id == game.home_team %}
+										<a class="table-link" href="{% url 'team_season' team.abbreviation|lower competition.season %}">
+											{{ team.full_name }}
+										</a>
+									{% endif %}
+								{% endfor %}
+							</td>
+							<td class="game-score center-align">
+								{{ game.home_score }}-{{ game.away_score }}
+							</td>
+							<td class="team-name">
+								<!-- Find which team ID matches the away team. IDs are used to reduce database queries. -->
+								{% for team in teams %}
+									{% if team.id == game.away_team %}
+										<a class="table-link" href="{% url 'team_season' team.abbreviation|lower competition.season %}">
+											{{ team.full_name }}
+										</a>
+									{% endif %}
+								{% endfor %}
+							</td>
+
+						</tr>
+
+					{% endif %}
+
+				{% endfor %}
+
+			</table>
+
+		{% endfor %}
+
+	<!-- If there were no games played on this day, display a message to that effect. -->
 	{% else %}
+
 		No games played on this date.
+
 	{% endif %}
 
 {% endblock %}

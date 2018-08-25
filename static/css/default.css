@@ -103,6 +103,9 @@ h3 {
 .game-lost {
 	background-color: #cc6666;
 }
+.team-name {
+	width: 45%;
+}
 
 /* Styles for league tables. */
 .league tr:first-child {
