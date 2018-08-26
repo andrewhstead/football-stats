@@ -80,7 +80,7 @@ def competition_table(request, country, competition, season):
 		tie_breaker_5 = competition.tie_breaker_5.lower().replace(" ", "_")
 
 	# Select the teams and the games for this competition.
-	teams = competition.teams.all()
+	teams = competition.teams.all().values('id', 'club', 'short_name', 'abbreviation')
 	games = Game.objects.filter(competition=competition)\
 	.values('game_date', 'home_team', 'away_team', 'home_score', 'away_score')
 
@@ -103,7 +103,7 @@ def competition_table(request, country, competition, season):
 	# Floats are used rather than integers in order to facilitate calculations.
 	for team in teams:
 		
-		team_record = {"name": team.short_name, "abbreviation": team.club.abbreviation,\
+		team_record = {"name": team['short_name'], "abbreviation": team['abbreviation'],\
 			"games_played": 0.0,\
 			"games_won": 0.0, "games_drawn": 0.0, "games_lost": 0.0, "goals_for": 0.0, "goals_against": 0.0,\
 			"home_won": 0.0, "home_drawn": 0.0, "home_lost": 0.0, "home_for": 0.0, "home_against": 0.0,\
@@ -111,8 +111,8 @@ def competition_table(request, country, competition, season):
 			"goal_average": 0.0, "goal_difference": 0.0, "points": 0.0}
 
 		# Next get the team's completed home games and away games for the current year.
-		home_games = [game for game in games if game['home_team'] == team.id]
-		away_games = [game for game in games if game['away_team'] == team.id]
+		home_games = [game for game in games if game['home_team'] == team['id']]
+		away_games = [game for game in games if game['away_team'] == team['id']]
 
 		# For each home game, add the game result and score to the team's record.
 		for game in home_games:
@@ -157,7 +157,7 @@ def competition_table(request, country, competition, season):
 
 		# Check whether the team has a points adjustment and if so, apply it to their record.
 		for adjustment in adjustments:
-			if adjustment.team == team:
+			if adjustment.team.short_name == team_record["name"]:
 				team_record["points"] += adjustment.points
 				team_record["name"] += " *"
 

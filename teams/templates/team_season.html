@@ -13,7 +13,10 @@
 		{% if competition.competition_type == "League" %}
 
 			<h3>
-				{{ competition.name }}
+				<img class="flag-icon" src="/media/{{ competition.country.flag }}" />
+				<a class="page-link" href="{% url 'competition_table' competition.country.abbreviation|lower competition.abbreviation|lower competition.season %}">
+					{{ competition.name }}
+				</a>
 			</h3>
 
 			<table class="stats-table results">
