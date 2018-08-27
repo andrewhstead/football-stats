@@ -1,7 +1,39 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from models import Game, Adjustment
+from models import Game, Adjustment, Season, Competition
+from countries.models import Country
+
+# function to create a league table.
+def get_competition(country, competition, season):
+
+	# Define the country and season and then use these to select the competition.
+	country = Country.objects.get(abbreviation=country.upper())
+	season = Season.objects.get(name=season)
+	competition = Competition.objects.get(country_id=country.id, abbreviation=competition.upper(), season_id=season.id)
+
+	return competition
+
+
+# function to create a league table.
+def colour_table(teams, competition):
+
+	# Work out a list of all possible positions in the table and construct the zones to be shaded in the table.
+	team_total = teams.count()
+	positions = range(1, (team_total + 1))
+
+	top_primary = positions[0:competition.top_primary_places]
+	top_secondary = positions[competition.top_primary_places:(competition.top_primary_places + competition.top_secondary_places)]
+	
+	bottom_primary = positions[(team_total - competition.bottom_primary_places):team_total]
+	if competition.bottom_primary_places == 0:
+		bottom_secondary = positions[-competition.bottom_secondary_places:]
+	else:
+		bottom_secondary = positions[-(competition.bottom_secondary_places + competition.bottom_primary_places):-competition.bottom_primary_places]
+
+	return {"top_primary": top_primary, "top_secondary": top_secondary,\
+		  "bottom_primary": bottom_primary, "bottom_secondary": bottom_secondary}
+
 
 # function to create a league table.
 def create_table(competition):
@@ -26,7 +58,7 @@ def create_table(competition):
 		tie_breaker_5 = competition.tie_breaker_5.lower().replace(" ", "_")
 
 	# Empty list to contain the league table.
-	league_table = []
+	table_records = []
 	
 	# Construct an dictionary for each team's playing record with all statistics set to 0.
 	# Floats are used rather than integers in order to facilitate calculations.
@@ -91,10 +123,10 @@ def create_table(competition):
 				team_record["name"] += " *"
 
 		# Add the team's updated record to the league table.
-		league_table.append(team_record)
+		table_records.append(team_record)
 
 	# Sort the league table by all chosen tiebreaking criteria.
-	league_table.sort(key=lambda team_record:[team_record["points"], team_record[tie_breaker_1], team_record[tie_breaker_2],\
+	table_records.sort(key=lambda team_record:[team_record["points"], team_record[tie_breaker_1], team_record[tie_breaker_2],\
 	 team_record[tie_breaker_3], team_record[tie_breaker_4], team_record[tie_breaker_5]], reverse=True)
 
-	return league_table
+	return (table_records, adjustments)

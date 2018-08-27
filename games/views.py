@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from models import Game, League, Competition, Season, Adjustment
-from utils import create_table
+from utils import get_competition, create_table, colour_table
 from teams.models import Club, Team
 from countries.models import Country
 import datetime
@@ -54,10 +54,11 @@ def league_tables(request):
 # Show the league table for the given competition.
 def competition_table(request, country, competition, season):
 
-	# Define the country and season and then use these to select the competition.
-	country = Country.objects.get(abbreviation=country.upper())
-	season = Season.objects.get(name=season)
-	competition = Competition.objects.get(country_id=country.id, abbreviation=competition.upper(), season_id=season.id)
+	# Get the competition from the supplied parameters using an external function.
+	competition = get_competition(country, competition, season)
+
+	# Select the teams involved in this competition and count how many there are.
+	teams = competition.teams.all().values('id', 'club', 'short_name', 'abbreviation')
 
 	# Set the tie-breaking method to be shown in the league table.
 	# If the first tie-breaker is Goal Average, this will be shown. Otherwise Goal Difference is shown.
@@ -66,29 +67,13 @@ def competition_table(request, country, competition, season):
 	else:
 		table_tie_breaker = "GD"
 
-	# Select the teams and the games for this competition.
-	teams = competition.teams.all().values('id', 'club', 'short_name', 'abbreviation')
+	# Construct the zones to be shaded in the league table using an external function.
+	table_zones = colour_table(teams, competition)
 
-	# Work out a list of all possible positions in the table.
-	team_total = teams.count()
-	positions = range(1, (team_total + 1))
-
-	# Construct the promotion and relegation zones or qualifying positions for the table.
-	top_primary = positions[0:competition.top_primary_places]
-	top_secondary = positions[competition.top_primary_places:(competition.top_primary_places + competition.top_secondary_places)]
-	bottom_primary = positions[(team_total - competition.bottom_primary_places):team_total]
-	if competition.bottom_primary_places == 0:
-		bottom_secondary = positions[-competition.bottom_secondary_places:]
-	else:
-		bottom_secondary = positions[-(competition.bottom_secondary_places + competition.bottom_primary_places):-competition.bottom_primary_places]
-
+	# Construct the team records for the league table using an external function.
 	league_table = create_table(competition)
 
-	# Select any points adjustments which apply to this competition.
-	adjustments = Adjustment.objects.filter(competition=competition)
-
 	return render(request, "competition_table.html",\
-		{"competition": competition, "teams": teams, "league_table": league_table,\
-		 "table_tie_breaker": table_tie_breaker, "adjustments": adjustments,\
-		  "top_primary": top_primary, "top_secondary": top_secondary,\
-		  "bottom_primary": bottom_primary, "bottom_secondary": bottom_secondary})
+		{"competition": competition, "teams": teams, "league_table": league_table[0],\
+		 "table_tie_breaker": table_tie_breaker, "adjustments": league_table[1],\
+		 "table_zones": table_zones})

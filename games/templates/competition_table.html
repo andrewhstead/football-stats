@@ -29,13 +29,13 @@
 	{% for team in league_table %}
 
 		<!-- Set up the CSS classes for rows which need to be highlighted. -->
-		{% if forloop.counter in top_primary %}
+		{% if forloop.counter in table_zones.top_primary %}
 			<tr class="top-primary">
-		{% elif forloop.counter in top_secondary %}
+		{% elif forloop.counter in table_zones.top_secondary %}
 			<tr class="top-secondary">
-		{% elif forloop.counter in bottom_secondary %}
+		{% elif forloop.counter in table_zones.bottom_secondary %}
 			<tr class="bottom-secondary">
-		{% elif forloop.counter in bottom_primary %}
+		{% elif forloop.counter in table_zones.bottom_primary %}
 			<tr class="bottom-primary">
 		{% endif %}
 
