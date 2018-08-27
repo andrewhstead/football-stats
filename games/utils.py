@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from models import Game, Adjustment, Season, Competition
 from countries.models import Country
+from teams.models import Club
 
 # function to create a league table.
 def get_competition(country, competition, season):
@@ -39,6 +40,8 @@ def colour_table(teams, competition):
 def create_table(competition):
 
 	# Select the teams and the games for this competition.
+	# Clubs are also needed to use club abbreviation in URLs.
+	clubs = Club.objects.all().values('id', 'abbreviation')
 	teams = competition.teams.all().values('id', 'club', 'short_name', 'abbreviation')
 	games = Game.objects.filter(competition=competition)\
 		.values('game_date', 'home_team', 'away_team', 'home_score', 'away_score')
@@ -64,7 +67,13 @@ def create_table(competition):
 	# Floats are used rather than integers in order to facilitate calculations.
 	for team in teams:
 
-		team_record = {"name": team['short_name'], "abbreviation": team['abbreviation'],\
+		# Work out which club matches the team and use that abbreviation in the team's record for URL construction.
+		for club in clubs:
+			if club['id'] == team['club']:
+				this_club = club
+		club_abbreviation = this_club['abbreviation']
+
+		team_record = {"name": team['short_name'], "abbreviation": club_abbreviation,\
 			"games_played": 0.0,\
 			"games_won": 0.0, "games_drawn": 0.0, "games_lost": 0.0, "goals_for": 0.0, "goals_against": 0.0,\
 			"home_won": 0.0, "home_drawn": 0.0, "home_lost": 0.0, "home_for": 0.0, "home_against": 0.0,\
