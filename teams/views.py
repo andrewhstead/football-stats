@@ -43,7 +43,9 @@ def team_season(request, team, season):
 	season = Season.objects.get(name=season)
 
 	# Full list of teams to get names of opponents.
-	teams = Team.objects.all()
+	# Clubs are also needed to use club abbreviation in URLs.
+	teams = Team.objects.all().values('full_name', 'id', 'club', 'abbreviation')
+	clubs = Club.objects.all().values('full_name', 'id', 'abbreviation')
 
 	# Empty lists to hold the team's competitions and games for the season
 	team_competitions = []
@@ -72,6 +74,11 @@ def team_season(request, team, season):
 			details = {"venue": "A", "team": game['away_team'], "opponent": game['home_team'],
 					"goals_for": game['away_score'], "goals_against": game['home_score'],
 					"date": game['game_date']}
+		# Find the club which matches the opponent and set their abbreviation to be used in the table URLs.
+		for club in clubs:
+			if details['opponent'] == club['id']:
+				details['abbreviation'] = club['abbreviation']
+		# Add the game to the list.
 		team_games.append(details)
 
 	return render(request, "team_season.html", {"team": team, "season": season,\
