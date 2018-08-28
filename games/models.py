@@ -73,6 +73,8 @@ class Competition(models.Model):
 	top_secondary_places = models.PositiveIntegerField(default=0)
 	bottom_primary_places = models.PositiveIntegerField(default=0)
 	bottom_secondary_places = models.PositiveIntegerField(default=0)
+	# Places to indicate promotion and relegation issues etc.
+	note = models.TextField(blank=True, null=True)
 
 	def __unicode__(self):
 		return unicode(self.name) + ' ' + unicode(self.season)

@@ -113,6 +113,13 @@
 
 		{% endif %}
 
+		<!-- Show the competition notes if there are any. -->
+		{% if competition.note %}
+
+			NB: {{ competition.note }}
+
+		{% endif %}
+
 	</section>
 
 {% endblock %}
