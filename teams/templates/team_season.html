@@ -5,7 +5,10 @@
 
 	<!-- Show the team name and the relevant season. -->
 	<h2>
-		{{ team }} {{ season }}
+		<a class="table-link" href="{% url 'club_overview' team.club.abbreviation|lower %}">
+			{{ team }} 
+		</a>
+		- {{ season }}
 	</h2>
 
 	{% for competition in team_competitions %}

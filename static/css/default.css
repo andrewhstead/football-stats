@@ -46,6 +46,9 @@ h3 {
 .page-link {
 	text-decoration: none;
 }
+.page-link:hover {
+	text-decoration: underline;
+}
 .page-link:visited {
 	color: blue;
 }
@@ -139,7 +142,7 @@ h3 {
 .list-title {
 	text-align: center;
 	font-weight: bold;
-	margin: 10px auto;
+	margin: ]auto;
 	font-size: 1.2em;
 }
 .competition-list {

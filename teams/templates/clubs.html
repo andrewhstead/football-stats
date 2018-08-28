@@ -7,7 +7,6 @@
 		Club Index
 	</h2>
 
-
 	{% for country in countries %}
 		<div class="list-title">
 			<img class="flag-icon" src="/media/{{ country.flag }}" /> {{ country.full_name|upper }}
@@ -29,7 +28,9 @@
 							<ul class="list-contents">
 								{% for club in league.current_clubs %}
 									<li>
-										{{ club.full_name}}
+										<a class="page-link" href="{% url 'club_overview' club.abbreviation|lower %}">
+											{{ club.full_name}}
+										</a>
 									</li>
 								{% endfor %}
 							</ul>

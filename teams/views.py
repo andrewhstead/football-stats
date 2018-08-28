@@ -13,7 +13,7 @@ def club_index(request):
 
 	countries = Country.objects.all().order_by('full_name')
 	leagues = League.objects.all().order_by('tier')
-	clubs = Club.objects.all().order_by('full_name').values('full_name', 'current_league')
+	clubs = Club.objects.all().order_by('full_name').values('full_name', 'abbreviation', 'current_league')
 
 	# Generate a list of clubs currently in each league.
 	for league in leagues:
@@ -23,6 +23,15 @@ def club_index(request):
 				league.current_clubs.append(club)
 
 	return render(request, "clubs.html", {"clubs": clubs, "leagues": leagues, "countries": countries})
+
+
+# Overview of an individual club.
+def club_overview(request, club):
+
+	# Find the club, current team name and relevant season from the parameters.
+	club = Club.objects.get(abbreviation=club.upper())
+
+	return render(request, "club_overview.html", {"club": club})
 
 
 # Show the results of a given team for a given season.
