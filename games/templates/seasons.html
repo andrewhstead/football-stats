@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+	<h2>
+		Season Archive
+	</h2>
+
+	<nav class="page-index">
+
+		<ul>
+			{% for season in seasons %}
+				<li>
+					<a class="page-link" href="{% url 'season_index' %}">
+						{{ season }}
+					</a>
+				</li>
+			{% endfor %}
+		</ul>
+
+	</nav>
+
+{% endblock %}

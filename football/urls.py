@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^teams/(?P<team>.*)/(?P<season>.*)/$', team_views.team_season, name='team_season'),
     url(r'^results/$', game_views.latest_results, name='latest_results'),
     url(r'^results/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/$', game_views.date_results, name='date_results'),
+    url(r'^seasons/$', game_views.season_index, name='season_index'),
 ]
 
 if settings.DEBUG:

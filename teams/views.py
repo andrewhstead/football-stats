@@ -75,11 +75,11 @@ def team_season(request, team, season):
 					"goals_for": game['away_score'], "goals_against": game['home_score'],
 					"date": game['game_date']}
 		# Find the club which matches the opponent and set their abbreviation to be used in the table URLs.
-		for club in clubs:
-			if details['opponent'] == club['id']:
-				details['abbreviation'] = club['abbreviation']
+		for opponent in clubs:
+			if details['opponent'] == opponent['id']:
+				details['abbreviation'] = opponent['abbreviation']
 		# Add the game to the list.
 		team_games.append(details)
 
-	return render(request, "team_season.html", {"team": team, "season": season,\
+	return render(request, "team_season.html", {"club": club, "team": team, "season": season,\
 	 "team_games": team_games, "teams": teams, "competitions": competitions, "team_competitions": team_competitions})

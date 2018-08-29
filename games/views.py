@@ -51,6 +51,14 @@ def league_tables(request):
 	return render(request, "league_tables.html", {"competitions": competitions, "current_season": current_season})
 
 
+# Show the index of available seasons.
+def season_index(request):
+
+	seasons = Season.objects.all()
+
+	return render(request, "seasons.html", {"seasons": seasons})
+
+
 # Show the league table for the given competition.
 def competition_table(request, country, competition, season):
 
