@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from models import Game, League, Competition, Season, Adjustment
-from utils import get_competition, create_table, colour_table
+from utils import get_competition, get_details, colour_table
 from teams.models import Club, Team
 from countries.models import Country
 import datetime
@@ -60,12 +60,11 @@ def season_index(request):
 
 
 # Show the league table for the given competition.
-def competition_table(request, country, competition, season):
+def competition_details(request, country, competition, season):
 
 	# Get the competition from the supplied parameters using an external function.
 	competition = get_competition(country, competition, season)
-
-	# Select the teams involved in this competition and count how many there are.
+	# Get the teams involved in this competition.
 	teams = competition.teams.all().values('id', 'club', 'short_name', 'abbreviation')
 
 	# Set the tie-breaking method to be shown in the league table.
@@ -79,9 +78,10 @@ def competition_table(request, country, competition, season):
 	table_zones = colour_table(teams, competition)
 
 	# Construct the team records for the league table using an external function.
-	league_table = create_table(competition)
+	details = get_details(competition)
 
-	return render(request, "competition_table.html",\
-		{"competition": competition, "teams": teams, "league_table": league_table[0],\
-		 "table_tie_breaker": table_tie_breaker, "adjustments": league_table[1],\
-		 "table_zones": table_zones})
+	return render(request, "competition_details.html",\
+		{"competition": competition,\
+		 "teams": details[0], "games": details[1],\
+		 "league_table": details[2], "adjustments": details[3],\
+		 "table_tie_breaker": table_tie_breaker, "table_zones": table_zones})

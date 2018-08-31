@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^clubs/(?P<club>.*)/', team_views.club_overview, name='club_overview'),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
     url(r'^tables/$', game_views.league_tables, name='league_tables'),
-    url(r'^tables/(?P<country>.*)/(?P<competition>.*)/(?P<season>.*)/$', game_views.competition_table, name='competition_table'),
+    url(r'^tables/(?P<country>.*)/(?P<competition>.*)/(?P<season>.*)/$', game_views.competition_details, name='competition_details'),
     url(r'^teams/(?P<team>.*)/(?P<season>.*)/$', team_views.team_season, name='team_season'),
     url(r'^results/$', game_views.latest_results, name='latest_results'),
     url(r'^results/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/$', game_views.date_results, name='date_results'),

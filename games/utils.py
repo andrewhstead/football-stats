@@ -37,7 +37,7 @@ def colour_table(teams, competition):
 
 
 # function to create a league table.
-def create_table(competition):
+def get_details(competition):
 
 	# Select the teams and the games for this competition.
 	# Clubs are also needed to use club abbreviation in URLs.
@@ -144,7 +144,8 @@ def create_table(competition):
 		else:
 			table_records.sort(key=lambda team_record:team_record[tie_breaker], reverse=True)
 
+	# Finally, sort by points.
 	table_records.sort(key=lambda team_record:team_record["points"], reverse=True)
 
 
-	return (table_records, adjustments)
+	return (teams, games, table_records, adjustments)
