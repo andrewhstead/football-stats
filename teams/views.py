@@ -59,19 +59,19 @@ def team_season(request, team, season):
 
 	# Filter out all games from the relevant season in which the chosen team was involved.
 	games = Game.objects.filter(Q(season=season) & (Q(home_team=team) | Q(away_team=team)))\
-		.values('game_date', 'home_team', 'away_team', 'home_score', 'away_score')\
+		.values('game_date', 'competition', 'home_team', 'away_team', 'home_score', 'away_score')\
 		.order_by('game_date', 'game_time')
 
 	# For each game in the season:
 	for game in games:
 		# If the team was at home, allocate the home team's result to them and set the away team as their opponent.
 		if game['home_team'] == team.id:
-			details = {"venue": "H", "team": game['home_team'], "opponent": game['away_team'],
+			details = {"venue": "H", "competition": game['competition'], "team": game['home_team'], "opponent": game['away_team'],
 					"goals_for": game['home_score'], "goals_against": game['away_score'],
 					"date": game['game_date']}
 		# If the chosen team was away, allocate the away team's result to them and set the home team as their opponent.
 		else:
-			details = {"venue": "A", "team": game['away_team'], "opponent": game['home_team'],
+			details = {"venue": "A", "competition": game['competition'], "team": game['away_team'], "opponent": game['home_team'],
 					"goals_for": game['away_score'], "goals_against": game['home_score'],
 					"date": game['game_date']}
 		# Find the club which matches the opponent and set their abbreviation to be used in the table URLs.

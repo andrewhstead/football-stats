@@ -67,6 +67,8 @@ def competition_details(request, country, competition, season):
 	# Get the teams involved in this competition.
 	teams = competition.teams.all().values('id', 'club', 'short_name', 'abbreviation')
 
+	season = season
+
 	# Set the tie-breaking method to be shown in the league table.
 	# If the first tie-breaker is Goal Average, this will be shown. Otherwise Goal Difference is shown.
 	if competition.tie_breaker_1 == "Goal Average":
@@ -81,7 +83,7 @@ def competition_details(request, country, competition, season):
 	details = get_details(competition)
 
 	return render(request, "competition_details.html",\
-		{"competition": competition,\
+		{"competition": competition, "season": season,\
 		 "teams": details[0], "games": details[1],\
 		 "league_table": details[2], "adjustments": details[3],\
 		 "table_tie_breaker": table_tie_breaker, "table_zones": table_zones})

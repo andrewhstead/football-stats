@@ -142,7 +142,9 @@
 						<!-- Find which team ID matches the home team. IDs are used to reduce database queries. -->
 						{% for team in teams %}
 							{% if team.id == game.home_team %}
-								{{ team.short_name }}
+								<a class="table-link" href="{% url 'team_season' team.abbreviation|lower season %}">
+									{{ team.short_name }}
+								</a>
 							{% endif %}
 						{% endfor %}
 					</td>

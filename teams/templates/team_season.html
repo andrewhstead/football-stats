@@ -11,65 +11,67 @@
 
 	{% for competition in team_competitions %}
 
-		{% if competition.competition_type == "League" %}
+		<h3>
+			<img class="flag-icon" src="/media/{{ competition.country.flag }}" />
+			<a class="page-link" href="{% url 'competition_details' competition.country.abbreviation|lower competition.abbreviation|lower competition.season %}">
+				{{ competition.name }}
+			</a>
+		</h3>
 
-			<h3>
-				<img class="flag-icon" src="/media/{{ competition.country.flag }}" />
-				<a class="page-link" href="{% url 'competition_details' competition.country.abbreviation|lower competition.abbreviation|lower competition.season %}">
-					{{ competition.name }}
-				</a>
-			</h3>
+		<table class="stats-table results">
 
-			<table class="stats-table results">
+			<!-- Show a list of results and/or fixtures. -->
+			{% for game in team_games %}
 
-				<!-- Show a list of results and/or fixtures. -->
-				{% for game in team_games %}
-						<tr>
+				{% if game.competition == competition.id %}
 
-							<td class="center-align">
-								<a class="table-link" href="{% url 'date_results' game.date|date:'Y' game.date|date:'m' game.date|date:'d' %}">
-									{{ game.date|date:"d/m/y" }}
-								</a>
+					<tr>
+
+						<td class="center-align">
+							<a class="table-link" href="{% url 'date_results' game.date|date:'Y' game.date|date:'m' game.date|date:'d' %}">
+								{{ game.date|date:"d/m/y" }}
+							</a>
+						</td>
+
+						<td>
+							<!-- Find which team ID matches the opponent. IDs are used to reduce database queries. -->
+							{% for team in teams %}
+								{% if team.id == game.opponent %}
+									<a class="table-link" href="{% url 'team_season' game.abbreviation|lower season %}">
+										{{ team.full_name }}
+									</a>
+								{% endif %}
+							{% endfor %}
+						</td>
+
+						<td class="center-align game-detail">
+							{{ game.venue }}
+						</td>
+
+						{% if game.goals_for > game.goals_against %}
+							<td class="center-align game-detail game-won">
+								W
 							</td>
-
-							<td>
-								<!-- Find which team ID matches the opponent. IDs are used to reduce database queries. -->
-								{% for team in teams %}
-									{% if team.id == game.opponent %}
-										<a class="table-link" href="{% url 'team_season' game.abbreviation|lower season %}">
-											{{ team.full_name }}
-										</a>
-									{% endif %}
-								{% endfor %}
+						{% elif game.goals_for == game.goals_against %}
+							<td class="center-align game-detail game-drawn">
+								D
 							</td>
-
-							<td class="center-align game-detail">
-								{{ game.venue }}
+						{% else %}
+							<td class="center-align game-detail game-lost">
+								L
 							</td>
+						{% endif %}
 
-							{% if game.goals_for > game.goals_against %}
-								<td class="center-align game-detail game-won">
-									W
-								</td>
-							{% elif game.goals_for == game.goals_against %}
-								<td class="center-align game-detail game-drawn">
-									D
-								</td>
-							{% else %}
-								<td class="center-align game-detail game-lost">
-									L
-								</td>
-							{% endif %}
+						<td class="center-align game-score">
+							{{ game.goals_for }}-{{ game.goals_against }}
+						</td>
+					</tr>
 
-							<td class="center-align game-score">
-								{{ game.goals_for }}-{{ game.goals_against }}
-							</td>
-						</tr>
-				{% endfor %}
+				{% endif %}
 
-			</table>
+			{% endfor %}
 
-		{% endif %}
+		</table>
 
 	{% endfor %}
 
