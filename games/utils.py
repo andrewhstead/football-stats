@@ -49,16 +49,19 @@ def create_table(competition):
 	# Select any points adjustments which apply to this competition.
 	adjustments = Adjustment.objects.filter(competition=competition)
 
-	# Convert the competition's tie-breakers for use in table sorting.
+	# Set up the competition's tie-breakers for use in table sorting.
+	# Add the lowest ranking tie-breaker first so that the highest ranking is applied last before points are used.
+	tie_breakers = []
+	tie_breaker_5 = competition.tie_breaker_5.lower().replace(" ", "_")
+	tie_breakers.append(tie_breaker_5)
+	tie_breaker_4 = competition.tie_breaker_4.lower().replace(" ", "_")
+	tie_breakers.append(tie_breaker_4)
+	tie_breaker_3 = competition.tie_breaker_3.lower().replace(" ", "_")
+	tie_breakers.append(tie_breaker_3)
+	tie_breaker_2 = competition.tie_breaker_2.lower().replace(" ", "_")
+	tie_breakers.append(tie_breaker_2)
 	tie_breaker_1 = competition.tie_breaker_1.lower().replace(" ", "_")
-	if competition.tie_breaker_2:
-		tie_breaker_2 = competition.tie_breaker_2.lower().replace(" ", "_")	
-	if competition.tie_breaker_3:
-		tie_breaker_3 = competition.tie_breaker_3.lower().replace(" ", "_")
-	if competition.tie_breaker_4:
-		tie_breaker_4 = competition.tie_breaker_4.lower().replace(" ", "_")
-	if competition.tie_breaker_5:
-		tie_breaker_5 = competition.tie_breaker_5.lower().replace(" ", "_")
+	tie_breakers.append(tie_breaker_1)
 
 	# Empty list to contain the league table.
 	table_records = []
@@ -135,7 +138,13 @@ def create_table(competition):
 		table_records.append(team_record)
 
 	# Sort the league table by all chosen tiebreaking criteria.
-	table_records.sort(key=lambda team_record:[team_record["points"], team_record[tie_breaker_1], team_record[tie_breaker_2],\
-	 team_record[tie_breaker_3], team_record[tie_breaker_4], team_record[tie_breaker_5]], reverse=True)
+	for tie_breaker in tie_breakers:
+		if tie_breaker == "name":
+			table_records.sort(key=lambda team_record:team_record[tie_breaker])
+		else:
+			table_records.sort(key=lambda team_record:team_record[tie_breaker], reverse=True)
+
+	table_records.sort(key=lambda team_record:team_record["points"], reverse=True)
+
 
 	return (table_records, adjustments)

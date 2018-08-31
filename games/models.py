@@ -15,7 +15,7 @@ STATUS_OPTIONS = (
 TIE_BREAKERS = (
     ('Goal Average', "Goal Average"),
     ('Goal Difference', "Goal Difference"),
-    ('Goals Scored', "Goals Scored"),
+    ('Goals For', "Goals For"),
     ('Games Won', "Games Won"),
     ('Name', "Name"),
 )
@@ -23,6 +23,7 @@ TIE_BREAKERS = (
 # The options for the type of competition.
 COMPETITION_TYPES = (
     ('League', "League"),
+    ('Playoff', "Playoff"),
     ('Cup', "Cup"),
 )
 
@@ -32,7 +33,7 @@ class League(models.Model):
 	country = models.ForeignKey(Country, related_name='leagues')
 	name = models.CharField(max_length=25)
 	abbreviation = models.CharField(max_length=3)
-	tier = models.IntegerField()
+	tier = models.IntegerField(blank=True, null=True)
 
 	def __unicode__(self):
 		return self.name
@@ -56,6 +57,7 @@ class Competition(models.Model):
 	name = models.CharField(max_length=25)
 	abbreviation = models.CharField(max_length=3)
 	teams = models.ManyToManyField(Team, related_name='teams', blank=True)
+	# Set up the league's points system.
 	home_win_points = models.IntegerField(default=3)
 	away_win_points = models.IntegerField(default=3)
 	home_draw_points = models.IntegerField(default=1)
