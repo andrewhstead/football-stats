@@ -64,6 +64,7 @@ def competition_details(request, country, competition, season):
 
 	# Get the competition from the supplied parameters using an external function.
 	competition = get_competition(country, competition, season)
+
 	# Get the teams involved in this competition.
 	teams = competition.teams.all().values('id', 'club', 'short_name', 'abbreviation')
 
@@ -82,8 +83,20 @@ def competition_details(request, country, competition, season):
 	# Construct the team records for the league table using an external function.
 	details = get_details(competition)
 
+
+	subsidiaries = competition.subsidiaries.all()
+	if subsidiaries:
+		for subsidiary in subsidiaries:
+			subsidiary_teams = subsidiary.teams.all().values('id', 'club', 'short_name', 'abbreviation')
+			subsidiary_games = subsidiary.games.all()\
+				.values('competition', 'game_date', 'season', 'home_team', 'away_team', 'home_score', 'away_score')
+	else:
+		subsidiary_teams = ""
+		subsidiary_games = ""
+
 	return render(request, "competition_details.html",\
 		{"competition": competition, "season": season,\
+		 "subsidiaries": subsidiaries, "subsidiary_games": subsidiary_games, "subsidiary_teams": subsidiary_teams,\
 		 "teams": details[0], "games": details[1],\
 		 "league_table": details[2], "adjustments": details[3],\
 		 "table_tie_breaker": table_tie_breaker, "table_zones": table_zones})

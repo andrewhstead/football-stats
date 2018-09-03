@@ -56,6 +56,7 @@ class Competition(models.Model):
 	season = models.ForeignKey(Season, related_name='competitions')
 	name = models.CharField(max_length=25)
 	abbreviation = models.CharField(max_length=3)
+	subsidiaries = models.ManyToManyField('self',symmetrical=False,blank=True)
 	teams = models.ManyToManyField(Team, related_name='teams', blank=True)
 	# Set up the league's points system.
 	home_win_points = models.IntegerField(default=3)

@@ -155,7 +155,9 @@
 						<!-- Find which team ID matches the away team. IDs are used to reduce database queries. -->
 						{% for team in teams %}
 							{% if team.id == game.away_team %}
-								{{ team.short_name }}
+								<a class="table-link" href="{% url 'team_season' team.abbreviation|lower season %}">
+									{{ team.short_name }}
+								</a>
 							{% endif %}
 						{% endfor %}
 					</td>
@@ -174,6 +176,56 @@
 				NB: {{ competition.note }}
 
 			{% endif %}
+
+		</section>
+
+	{% endif %}
+
+	{% if subsidiaries %}
+
+		<section class="competition-details">
+
+			{% for subsidiary in subsidiaries %}
+
+				{{ subsidiary.name }}
+
+				<table class="stats-table results">
+
+					{% for game in subsidiary_games %}
+						
+						<!-- Show the result of each game. -->
+						<tr>
+
+							<td class="center-align">
+								{{ game.game_date|date:"d/m/y" }}
+							</td>
+							<td class="right-align">
+								<!-- Find which team ID matches the home team. IDs are used to reduce database queries. -->
+								{% for team in subsidiary_teams %}
+									{% if team.id == game.home_team %}
+										{{ team.short_name }}
+									{% endif %}
+								{% endfor %}
+							</td>
+							<td class="game-score center-align">
+								{{ game.home_score }}-{{ game.away_score }}
+							</td>
+							<td>
+								<!-- Find which team ID matches the away team. IDs are used to reduce database queries. -->
+								{% for team in subsidiary_teams %}
+									{% if team.id == game.away_team %}
+										{{ team.short_name }}
+									{% endif %}
+								{% endfor %}
+							</td>
+
+						</tr>
+
+					{% endfor %}
+
+				</table>
+
+			{% endfor %}
 
 		</section>
 
