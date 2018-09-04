@@ -90,6 +90,7 @@ class Game(models.Model):
 	game_status = models.CharField(max_length=10, choices=STATUS_OPTIONS, default="Scheduled")
 	game_date = models.DateField()
 	game_time = models.TimeField(blank=True, null=True)
+	neutral_venue = models.BooleanField(default=False)
 	home_team = models.ForeignKey(Team, related_name='game_home')
 	away_team = models.ForeignKey(Team, related_name='game_away')
 	home_score = models.IntegerField(blank=True, null=True)

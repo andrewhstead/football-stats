@@ -118,7 +118,9 @@
 			<!-- Show the competition notes if there are any. -->
 			{% if competition.note %}
 
-				NB: {{ competition.note }}
+				<section class="competition-note">
+					NB: {{ competition.note }}
+				</section>
 
 			{% endif %}
 
@@ -168,7 +170,7 @@
 
 		</table>
 
-		<section class="competition-details">
+		<section class="competition-note">
 
 			<!-- Show the competition notes if there are any. -->
 			{% if competition.note %}
@@ -183,11 +185,11 @@
 
 	{% if subsidiaries %}
 
-		<section class="competition-details">
-
 			{% for subsidiary in subsidiaries %}
 
-				{{ subsidiary.name }}
+				<h2>
+					{{ subsidiary.name }}
+				</h2>
 
 				<table class="stats-table results">
 
@@ -226,8 +228,6 @@
 				</table>
 
 			{% endfor %}
-
-		</section>
 
 	{% endif %}
 
